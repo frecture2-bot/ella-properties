@@ -20,15 +20,17 @@ export const Route = createFileRoute("/_authenticated/admin/properties")({
   component: PropertiesAdmin,
 });
 
-const TYPES = ["Апартамент", "Къща", "Парцел", "Офис", "Магазин", "Бизнес имот"];
-const STATUSES = ["Продава", "Под наем", "Продаден", "Отдаден"];
+const TYPES = ["Апартамент", "Къща", "Парцел", "Офис", "Магазин", "Бизнес имот"] as const;
+const STATUSES = ["Продава", "Под наем", "Продаден", "Отдаден"] as const;
+type PropType = typeof TYPES[number];
+type PropStatus = typeof STATUSES[number];
 
 type Img = { id?: string; url: string; storage_path?: string | null; sort_order: number };
 
 const empty = {
   title: "",
-  type: "Апартамент",
-  status: "Продава",
+  type: "Апартамент" as PropType,
+  status: "Продава" as PropStatus,
   price: 0,
   city: "Перник",
   district: "",
@@ -194,8 +196,8 @@ function PropertyDialog({
       if (editing) {
         setForm({
           title: editing.title,
-          type: editing.type,
-          status: editing.status,
+          type: editing.type as PropType,
+          status: editing.status as PropStatus,
           price: Number(editing.price),
           city: editing.city ?? "Перник",
           district: editing.district ?? "",
@@ -323,13 +325,13 @@ function PropertyDialog({
 
           <div className="grid gap-4 sm:grid-cols-2">
             <Field label="Тип имот">
-              <Select value={form.type} onValueChange={(v) => setForm({ ...form, type: v })}>
+              <Select value={form.type} onValueChange={(v) => setForm({ ...form, type: v as PropType })}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>{TYPES.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent>
               </Select>
             </Field>
             <Field label="Статус">
-              <Select value={form.status} onValueChange={(v) => setForm({ ...form, status: v })}>
+              <Select value={form.status} onValueChange={(v) => setForm({ ...form, status: v as PropStatus })}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>{STATUSES.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent>
               </Select>
