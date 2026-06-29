@@ -683,7 +683,7 @@ function Contact() {
               icon={MapPin}
               title="Адрес"
               lines={[
-                { text: "Център, ул. „Райко Даскалов" 4", href: MAPS_URL },
+                { text: `Център, ул. „Райко Даскалов" 4`, href: MAPS_URL },
                 { text: "2300 Перник, България" },
               ]}
             />
@@ -843,7 +843,7 @@ function Footer() {
           <ul className="mt-4 space-y-2 text-sm">
             <li><a href={`tel:${PHONE_1_TEL}`} className="hover:text-gold">{PHONE_1}</a></li>
             <li><a href="tel:+359884388022" className="hover:text-gold">{PHONE_2}</a></li>
-            <li><a href={MAPS_URL} target="_blank" rel="noreferrer" className="hover:text-gold">ул. „Райко Даскалов" 4, Перник</a></li>
+            <li><a href={MAPS_URL} target="_blank" rel="noreferrer" className="hover:text-gold">{`ул. „Райко Даскалов" 4, Перник`}</a></li>
           </ul>
         </div>
         <div>
