@@ -14,16 +14,334 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      inquiries: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          message: string
+          name: string
+          phone: string | null
+          property_id: string | null
+          status: Database["public"]["Enums"]["inquiry_status"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          message: string
+          name: string
+          phone?: string | null
+          property_id?: string | null
+          status?: Database["public"]["Enums"]["inquiry_status"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          message?: string
+          name?: string
+          phone?: string | null
+          property_id?: string | null
+          status?: Database["public"]["Enums"]["inquiry_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inquiries_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      properties: {
+        Row: {
+          address: string | null
+          area: number | null
+          city: string
+          created_at: string
+          created_by: string | null
+          currency: string
+          description: string | null
+          district: string | null
+          floor: string | null
+          id: string
+          is_featured: boolean
+          is_published: boolean
+          main_image: string | null
+          map_lat: number | null
+          map_lng: number | null
+          price: number
+          rooms: number | null
+          seo_description: string | null
+          seo_keywords: string | null
+          seo_title: string | null
+          slug: string | null
+          status: Database["public"]["Enums"]["property_status"]
+          title: string
+          type: Database["public"]["Enums"]["property_type"]
+          updated_at: string
+          video_url: string | null
+        }
+        Insert: {
+          address?: string | null
+          area?: number | null
+          city?: string
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          description?: string | null
+          district?: string | null
+          floor?: string | null
+          id?: string
+          is_featured?: boolean
+          is_published?: boolean
+          main_image?: string | null
+          map_lat?: number | null
+          map_lng?: number | null
+          price?: number
+          rooms?: number | null
+          seo_description?: string | null
+          seo_keywords?: string | null
+          seo_title?: string | null
+          slug?: string | null
+          status?: Database["public"]["Enums"]["property_status"]
+          title: string
+          type: Database["public"]["Enums"]["property_type"]
+          updated_at?: string
+          video_url?: string | null
+        }
+        Update: {
+          address?: string | null
+          area?: number | null
+          city?: string
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          description?: string | null
+          district?: string | null
+          floor?: string | null
+          id?: string
+          is_featured?: boolean
+          is_published?: boolean
+          main_image?: string | null
+          map_lat?: number | null
+          map_lng?: number | null
+          price?: number
+          rooms?: number | null
+          seo_description?: string | null
+          seo_keywords?: string | null
+          seo_title?: string | null
+          slug?: string | null
+          status?: Database["public"]["Enums"]["property_status"]
+          title?: string
+          type?: Database["public"]["Enums"]["property_type"]
+          updated_at?: string
+          video_url?: string | null
+        }
+        Relationships: []
+      }
+      property_images: {
+        Row: {
+          created_at: string
+          id: string
+          property_id: string
+          sort_order: number
+          storage_path: string | null
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          property_id: string
+          sort_order?: number
+          storage_path?: string | null
+          url: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          property_id?: string
+          sort_order?: number
+          storage_path?: string | null
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_images_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      site_pages: {
+        Row: {
+          content: Json
+          id: string
+          seo_description: string | null
+          seo_keywords: string | null
+          seo_title: string | null
+          slug: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content?: Json
+          id?: string
+          seo_description?: string | null
+          seo_keywords?: string | null
+          seo_title?: string | null
+          slug: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content?: Json
+          id?: string
+          seo_description?: string | null
+          seo_keywords?: string | null
+          seo_title?: string | null
+          slug?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          address: string | null
+          email: string | null
+          facebook_url: string | null
+          id: number
+          instagram_url: string | null
+          logo_url: string | null
+          phone1: string | null
+          phone2: string | null
+          updated_at: string
+          viber_number: string | null
+          whatsapp_number: string | null
+        }
+        Insert: {
+          address?: string | null
+          email?: string | null
+          facebook_url?: string | null
+          id?: number
+          instagram_url?: string | null
+          logo_url?: string | null
+          phone1?: string | null
+          phone2?: string | null
+          updated_at?: string
+          viber_number?: string | null
+          whatsapp_number?: string | null
+        }
+        Update: {
+          address?: string | null
+          email?: string | null
+          facebook_url?: string | null
+          id?: number
+          instagram_url?: string | null
+          logo_url?: string | null
+          phone1?: string | null
+          phone2?: string | null
+          updated_at?: string
+          viber_number?: string | null
+          whatsapp_number?: string | null
+        }
+        Relationships: []
+      }
+      team_members: {
+        Row: {
+          created_at: string
+          description: string | null
+          email: string | null
+          id: string
+          is_active: boolean
+          name: string
+          phone: string | null
+          photo_url: string | null
+          role: string | null
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          email?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          phone?: string | null
+          photo_url?: string | null
+          role?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          email?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          phone?: string | null
+          photo_url?: string | null
+          role?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "editor"
+      inquiry_status: "Ново" | "Обработено" | "Завършено"
+      property_status: "Продава" | "Под наем" | "Продаден" | "Отдаден"
+      property_type:
+        | "Апартамент"
+        | "Къща"
+        | "Парцел"
+        | "Офис"
+        | "Магазин"
+        | "Бизнес имот"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +468,18 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "editor"],
+      inquiry_status: ["Ново", "Обработено", "Завършено"],
+      property_status: ["Продава", "Под наем", "Продаден", "Отдаден"],
+      property_type: [
+        "Апартамент",
+        "Къща",
+        "Парцел",
+        "Офис",
+        "Магазин",
+        "Бизнес имот",
+      ],
+    },
   },
 } as const
