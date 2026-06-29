@@ -37,6 +37,7 @@ import { cn } from "@/lib/utils";
 
 import heroImage from "@/assets/hero.jpg";
 import { properties, type PropertyType } from "@/data/properties";
+import { supabase } from "@/integrations/supabase/client";
 
 const PHONE_1 = "+359 88 481 6232";
 const PHONE_2 = "+359 88 438 8022";
@@ -641,18 +642,26 @@ function Contact() {
     setForm((f) => ({ ...f, [k]: v }));
   }
 
-  function onSubmit(e: React.FormEvent) {
+  async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!form.name.trim() || !form.phone.trim() || !form.message.trim()) {
       toast.error("Моля, попълнете задължителните полета.");
       return;
     }
     setSending(true);
-    setTimeout(() => {
-      setSending(false);
-      toast.success("Благодарим Ви! Ще се свържем с Вас възможно най-скоро.");
-      setForm({ name: "", phone: "", email: "", message: "" });
-    }, 700);
+    const { error } = await supabase.from("inquiries").insert({
+      name: form.name.trim().slice(0, 100),
+      phone: form.phone.trim().slice(0, 50),
+      email: form.email.trim().slice(0, 255) || null,
+      message: form.message.trim().slice(0, 1000),
+    });
+    setSending(false);
+    if (error) {
+      toast.error("Възникна грешка при изпращането. Моля, опитайте по-късно.");
+      return;
+    }
+    toast.success("Благодарим Ви! Ще се свържем с Вас възможно най-скоро.");
+    setForm({ name: "", phone: "", email: "", message: "" });
   }
 
   return (
