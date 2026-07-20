@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Toaster } from "@/components/ui/sonner";
+import { useSiteSettings } from "@/hooks/use-site-settings";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({ meta: [{ title: "Вход — Елла Недвижими Имоти" }] }),
@@ -22,7 +23,8 @@ const loginSchema = z.object({
 
 function AuthPage() {
   const navigate = useNavigate();
-  const [mode, setMode] = useState<"login" | "forgot">("login");
+  const settings = useSiteSettings();
+  const [mode, setMode] = useState<"login" | "signup" | "forgot">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -43,6 +45,26 @@ function AuthPage() {
         });
         if (error) throw error;
         toast.success("Изпратихме ви линк за нова парола.");
+        setMode("login");
+        return;
+      }
+      if (mode === "signup") {
+        if (!settings.allow_registration) {
+          toast.error("Регистрацията е изключена от администратор.");
+          return;
+        }
+        const parsed = loginSchema.safeParse({ email, password });
+        if (!parsed.success) {
+          toast.error(parsed.error.issues[0]?.message ?? "Невалидни данни");
+          return;
+        }
+        const { error } = await supabase.auth.signUp({
+          email: parsed.data.email,
+          password: parsed.data.password,
+          options: { emailRedirectTo: window.location.origin },
+        });
+        if (error) throw error;
+        toast.success("Регистрацията е успешна. Проверете имейла си за потвърждение.");
         setMode("login");
         return;
       }
@@ -85,10 +107,12 @@ function AuthPage() {
 
           <h1 className="font-display text-2xl">
             {mode === "login" && "Вход в системата"}
+            {mode === "signup" && "Регистрация"}
             {mode === "forgot" && "Забравена парола"}
           </h1>
           <p className="mt-1 text-sm text-white/60">
             {mode === "login" && "Влезте, за да управлявате имотите и съдържанието."}
+            {mode === "signup" && "Създайте нов акаунт за достъп до админ панела."}
             {mode === "forgot" && "Ще получите линк за смяна на паролата."}
           </p>
 
@@ -126,15 +150,23 @@ function AuthPage() {
             >
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {mode === "login" && "Влез"}
+              {mode === "signup" && "Регистрирай се"}
               {mode === "forgot" && "Изпрати линк"}
             </Button>
           </form>
 
           <div className="mt-6 flex flex-col gap-2 text-sm">
             {mode === "login" && (
-              <button onClick={() => setMode("forgot")} className="text-left text-white/70 hover:text-gold">
-                Забравена парола?
-              </button>
+              <>
+                <button onClick={() => setMode("forgot")} className="text-left text-white/70 hover:text-gold">
+                  Забравена парола?
+                </button>
+                {settings.allow_registration && (
+                  <button onClick={() => setMode("signup")} className="text-left text-white/70 hover:text-gold">
+                    Нямате акаунт? Регистрирайте се
+                  </button>
+                )}
+              </>
             )}
             {mode !== "login" && (
               <button onClick={() => setMode("login")} className="text-left text-white/70 hover:text-gold">
