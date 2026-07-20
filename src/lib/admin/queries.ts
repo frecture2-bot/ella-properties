@@ -61,6 +61,28 @@ export type SettingsRow = {
   instagram_url: string | null;
   whatsapp_number: string | null;
   viber_number: string | null;
+  brand_name: string | null;
+  brand_tagline: string | null;
+  primary_color: string | null;
+  accent_color: string | null;
+  hero_eyebrow: string | null;
+  hero_title: string | null;
+  hero_subtitle: string | null;
+  hero_cta_label: string | null;
+  hero_cta_link: string | null;
+  hero_secondary_cta_label: string | null;
+  hero_secondary_cta_link: string | null;
+  hero_image_url: string | null;
+  about_title: string | null;
+  about_text: string | null;
+  about_text_secondary: string | null;
+  stat1_value: string | null;
+  stat1_label: string | null;
+  stat2_value: string | null;
+  stat2_label: string | null;
+  stat3_value: string | null;
+  stat3_label: string | null;
+  allow_registration: boolean;
 };
 
 export async function fetchStats() {
