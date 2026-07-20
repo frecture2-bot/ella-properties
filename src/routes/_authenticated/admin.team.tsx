@@ -52,8 +52,25 @@ function TeamAdmin() {
   async function uploadPhoto(file: File) {
     setUploading(true);
     try {
-      const path = `team/${crypto.randomUUID()}.${file.name.split(".").pop()}`;
-      const { error } = await supabase.storage.from("property-images").upload(path, file);
+      const ALLOWED: Record<string, string> = {
+        "image/jpeg": "jpg",
+        "image/png": "png",
+        "image/webp": "webp",
+        "image/gif": "gif",
+      };
+      if (!ALLOWED[file.type]) {
+        toast.error("Неподдържан файл. Разрешени: JPG, PNG, WEBP, GIF.");
+        return;
+      }
+      if (file.size > 10 * 1024 * 1024) {
+        toast.error("Файлът е твърде голям (макс. 10MB)");
+        return;
+      }
+      const path = `team/${crypto.randomUUID()}.${ALLOWED[file.type]}`;
+      const { error } = await supabase.storage.from("property-images").upload(path, file, {
+        contentType: file.type,
+        upsert: false,
+      });
       if (error) throw error;
       const { data } = supabase.storage.from("property-images").getPublicUrl(path);
       setForm((f) => ({ ...f, photo_url: data.publicUrl }));

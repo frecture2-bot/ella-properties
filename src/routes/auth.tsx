@@ -22,7 +22,7 @@ const loginSchema = z.object({
 
 function AuthPage() {
   const navigate = useNavigate();
-  const [mode, setMode] = useState<"login" | "signup" | "forgot">("login");
+  const [mode, setMode] = useState<"login" | "forgot">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -51,24 +51,13 @@ function AuthPage() {
         toast.error(parsed.error.issues[0]?.message ?? "Невалидни данни");
         return;
       }
-      if (mode === "signup") {
-        const { error } = await supabase.auth.signUp({
-          email: parsed.data.email,
-          password: parsed.data.password,
-          options: { emailRedirectTo: `${window.location.origin}/admin` },
-        });
-        if (error) throw error;
-        toast.success("Акаунтът е създаден. Влезте сега.");
-        setMode("login");
-      } else {
-        const { error } = await supabase.auth.signInWithPassword({
-          email: parsed.data.email,
-          password: parsed.data.password,
-        });
-        if (error) throw error;
-        toast.success("Добре дошли!");
-        navigate({ to: "/admin" });
-      }
+      const { error } = await supabase.auth.signInWithPassword({
+        email: parsed.data.email,
+        password: parsed.data.password,
+      });
+      if (error) throw error;
+      toast.success("Добре дошли!");
+      navigate({ to: "/admin" });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Възникна грешка");
     } finally {
@@ -96,12 +85,10 @@ function AuthPage() {
 
           <h1 className="font-display text-2xl">
             {mode === "login" && "Вход в системата"}
-            {mode === "signup" && "Регистрация на администратор"}
             {mode === "forgot" && "Забравена парола"}
           </h1>
           <p className="mt-1 text-sm text-white/60">
             {mode === "login" && "Влезте, за да управлявате имотите и съдържанието."}
-            {mode === "signup" && "Първият регистриран потребител получава админ права."}
             {mode === "forgot" && "Ще получите линк за смяна на паролата."}
           </p>
 
@@ -139,21 +126,15 @@ function AuthPage() {
             >
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {mode === "login" && "Влез"}
-              {mode === "signup" && "Създай акаунт"}
               {mode === "forgot" && "Изпрати линк"}
             </Button>
           </form>
 
           <div className="mt-6 flex flex-col gap-2 text-sm">
             {mode === "login" && (
-              <>
-                <button onClick={() => setMode("forgot")} className="text-left text-white/70 hover:text-gold">
-                  Забравена парола?
-                </button>
-                <button onClick={() => setMode("signup")} className="text-left text-white/70 hover:text-gold">
-                  Нямате акаунт? Регистрирайте се
-                </button>
-              </>
+              <button onClick={() => setMode("forgot")} className="text-left text-white/70 hover:text-gold">
+                Забравена парола?
+              </button>
             )}
             {mode !== "login" && (
               <button onClick={() => setMode("login")} className="text-left text-white/70 hover:text-gold">
