@@ -26,6 +26,7 @@ const NAV = [
   { to: "/admin/properties", label: "Имоти", icon: Home },
   { to: "/admin/inquiries", label: "Запитвания", icon: MessageSquare },
   { to: "/admin/team", label: "Екип", icon: Users },
+  { to: "/admin/users", label: "Потребители", icon: Users },
   { to: "/admin/settings", label: "Настройки", icon: Settings },
 ] as const;
 

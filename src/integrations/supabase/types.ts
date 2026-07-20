@@ -215,40 +215,106 @@ export type Database = {
       }
       site_settings: {
         Row: {
+          about_text: string | null
+          about_text_secondary: string | null
+          about_title: string | null
+          accent_color: string | null
           address: string | null
+          allow_registration: boolean
+          brand_name: string | null
+          brand_tagline: string | null
           email: string | null
           facebook_url: string | null
+          hero_cta_label: string | null
+          hero_cta_link: string | null
+          hero_eyebrow: string | null
+          hero_image_url: string | null
+          hero_secondary_cta_label: string | null
+          hero_secondary_cta_link: string | null
+          hero_subtitle: string | null
+          hero_title: string | null
           id: number
           instagram_url: string | null
           logo_url: string | null
           phone1: string | null
           phone2: string | null
+          primary_color: string | null
+          stat1_label: string | null
+          stat1_value: string | null
+          stat2_label: string | null
+          stat2_value: string | null
+          stat3_label: string | null
+          stat3_value: string | null
           updated_at: string
           viber_number: string | null
           whatsapp_number: string | null
         }
         Insert: {
+          about_text?: string | null
+          about_text_secondary?: string | null
+          about_title?: string | null
+          accent_color?: string | null
           address?: string | null
+          allow_registration?: boolean
+          brand_name?: string | null
+          brand_tagline?: string | null
           email?: string | null
           facebook_url?: string | null
+          hero_cta_label?: string | null
+          hero_cta_link?: string | null
+          hero_eyebrow?: string | null
+          hero_image_url?: string | null
+          hero_secondary_cta_label?: string | null
+          hero_secondary_cta_link?: string | null
+          hero_subtitle?: string | null
+          hero_title?: string | null
           id?: number
           instagram_url?: string | null
           logo_url?: string | null
           phone1?: string | null
           phone2?: string | null
+          primary_color?: string | null
+          stat1_label?: string | null
+          stat1_value?: string | null
+          stat2_label?: string | null
+          stat2_value?: string | null
+          stat3_label?: string | null
+          stat3_value?: string | null
           updated_at?: string
           viber_number?: string | null
           whatsapp_number?: string | null
         }
         Update: {
+          about_text?: string | null
+          about_text_secondary?: string | null
+          about_title?: string | null
+          accent_color?: string | null
           address?: string | null
+          allow_registration?: boolean
+          brand_name?: string | null
+          brand_tagline?: string | null
           email?: string | null
           facebook_url?: string | null
+          hero_cta_label?: string | null
+          hero_cta_link?: string | null
+          hero_eyebrow?: string | null
+          hero_image_url?: string | null
+          hero_secondary_cta_label?: string | null
+          hero_secondary_cta_link?: string | null
+          hero_subtitle?: string | null
+          hero_title?: string | null
           id?: number
           instagram_url?: string | null
           logo_url?: string | null
           phone1?: string | null
           phone2?: string | null
+          primary_color?: string | null
+          stat1_label?: string | null
+          stat1_value?: string | null
+          stat2_label?: string | null
+          stat2_value?: string | null
+          stat3_label?: string | null
+          stat3_value?: string | null
           updated_at?: string
           viber_number?: string | null
           whatsapp_number?: string | null

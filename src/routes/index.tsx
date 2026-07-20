@@ -38,6 +38,7 @@ import { cn } from "@/lib/utils";
 import heroImage from "@/assets/hero.jpg";
 import { properties, type PropertyType } from "@/data/properties";
 import { supabase } from "@/integrations/supabase/client";
+import { useSiteSettings, type PublicSettings } from "@/hooks/use-site-settings";
 
 const PHONE_1 = "+359 88 481 6232";
 const PHONE_2 = "+359 88 438 8022";
@@ -68,12 +69,14 @@ export const Route = createFileRoute("/")({
 });
 
 function HomePage() {
+  const settings = useSiteSettings();
   return (
     <div className="min-h-screen bg-background font-sans text-foreground antialiased">
+      <BrandStyle primary={settings.primary_color} accent={settings.accent_color} />
       <Header />
       <main>
-        <Hero />
-        <About />
+        <Hero settings={settings} />
+        <About settings={settings} />
         <Services />
         <Catalog />
         <WhyUs />
@@ -85,6 +88,11 @@ function HomePage() {
       <Toaster position="top-center" />
     </div>
   );
+}
+
+function BrandStyle({ primary, accent }: { primary: string; accent: string }) {
+  const css = `:root{--navy:${primary};--navy-deep:${primary};--gold:${accent};--gold-soft:${accent};}`;
+  return <style dangerouslySetInnerHTML={{ __html: css }} />;
 }
 
 /* ---------------- Header ---------------- */
@@ -180,12 +188,17 @@ function Logo() {
 
 /* ---------------- Hero ---------------- */
 
-function Hero() {
+function Hero({ settings }: { settings: PublicSettings }) {
+  const stats = [
+    { k: settings.stat1_value, v: settings.stat1_label },
+    { k: settings.stat2_value, v: settings.stat2_label },
+    { k: settings.stat3_value, v: settings.stat3_label },
+  ];
   return (
     <section id="top" className="relative isolate overflow-hidden">
       <div className="relative">
         <img
-          src={heroImage}
+          src={settings.hero_image_url || heroImage}
           alt="Луксозен апартамент"
           width={1920}
           height={1280}
@@ -197,15 +210,13 @@ function Hero() {
             <div className="max-w-2xl">
               <span className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-white/5 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.2em] text-gold backdrop-blur">
                 <span className="h-1.5 w-1.5 rounded-full bg-gold" />
-                Агенция в Перник
+                {settings.hero_eyebrow}
               </span>
               <h1 className="mt-6 font-display text-4xl font-medium leading-[1.05] text-white sm:text-5xl lg:text-6xl">
-                Вашият надежден партньор в света на{" "}
-                <span className="italic text-gold">недвижимите имоти</span>
+                {settings.hero_title}
               </h1>
               <p className="mt-6 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg">
-                Елла Недвижими Имоти — професионално съдействие при покупка,
-                продажба и отдаване под наем на имоти в Перник и региона.
+                {settings.hero_subtitle}
               </p>
               <div className="mt-9 flex flex-wrap gap-3">
                 <Button
@@ -213,8 +224,8 @@ function Hero() {
                   size="lg"
                   className="h-12 rounded-full bg-gold px-7 text-navy-deep hover:bg-gold-soft"
                 >
-                  <a href="#catalog">
-                    Разгледай имоти <ArrowRight className="ml-2 h-4 w-4" />
+                  <a href={settings.hero_cta_link || "#catalog"}>
+                    {settings.hero_cta_label} <ArrowRight className="ml-2 h-4 w-4" />
                   </a>
                 </Button>
                 <Button
@@ -223,15 +234,13 @@ function Hero() {
                   variant="outline"
                   className="h-12 rounded-full border-white/40 bg-white/5 px-7 text-white backdrop-blur hover:bg-white/10 hover:text-white"
                 >
-                  <a href="#contact">Свържи се с нас</a>
+                  <a href={settings.hero_secondary_cta_link || "#contact"}>
+                    {settings.hero_secondary_cta_label}
+                  </a>
                 </Button>
               </div>
               <dl className="mt-12 grid max-w-lg grid-cols-3 gap-6 border-t border-white/15 pt-8 text-white">
-                {[
-                  { k: "15+", v: "години опит" },
-                  { k: "500+", v: "успешни сделки" },
-                  { k: "100%", v: "коректност" },
-                ].map((s) => (
+                {stats.map((s) => (
                   <div key={s.v}>
                     <dt className="font-display text-3xl text-gold">{s.k}</dt>
                     <dd className="mt-1 text-xs uppercase tracking-[0.15em] text-white/65">
@@ -250,32 +259,29 @@ function Hero() {
 
 /* ---------------- About ---------------- */
 
-function About() {
+function About({ settings }: { settings: PublicSettings }) {
   return (
     <section id="about" className="bg-background py-24 lg:py-32">
       <div className="mx-auto grid max-w-7xl gap-14 px-5 lg:grid-cols-2 lg:gap-20 lg:px-8">
         <div>
           <SectionEyebrow>За нас</SectionEyebrow>
           <h2 className="mt-4 font-display text-4xl font-medium text-navy sm:text-5xl">
-            Имоти, избрани с внимание към детайла
+            {settings.about_title}
           </h2>
-          <p className="mt-6 text-lg leading-relaxed text-foreground/75">
-            Елла Недвижими Имоти предлага професионални услуги в сферата на
-            недвижимите имоти. Нашата цел е да помогнем на всеки клиент да
-            направи правилния избор при покупка, продажба или отдаване под наем
-            на имот.
+          <p className="mt-6 whitespace-pre-line text-lg leading-relaxed text-foreground/75">
+            {settings.about_text}
           </p>
-          <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-            Базирани в сърцето на Перник, ние познаваме отлично местния пазар и
-            работим с прозрачност, лично отношение и грижа за дългосрочното
-            доверие на нашите клиенти.
-          </p>
+          {settings.about_text_secondary && (
+            <p className="mt-4 whitespace-pre-line text-base leading-relaxed text-muted-foreground">
+              {settings.about_text_secondary}
+            </p>
+          )}
         </div>
         <div className="grid grid-cols-2 gap-5">
           {[
-            { k: "Перник", v: "Локален експерт" },
-            { k: "Лично", v: "отношение" },
-            { k: "Реални", v: "оферти" },
+            { k: settings.stat1_value, v: settings.stat1_label },
+            { k: settings.stat2_value, v: settings.stat2_label },
+            { k: settings.stat3_value, v: settings.stat3_label },
             { k: "Пълно", v: "съдействие" },
           ].map((c) => (
             <div
