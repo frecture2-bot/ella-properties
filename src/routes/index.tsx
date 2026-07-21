@@ -405,7 +405,7 @@ function Catalog() {
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
         <SectionEyebrow>Каталог с имоти</SectionEyebrow>
         <h2 className="mt-4 font-display text-4xl font-medium text-navy sm:text-5xl">
-          Актуални оферти в Перник
+          Актуални оферти в област Перник и София
         </h2>
 
         <div className="mt-10 grid gap-4 rounded-2xl border border-border bg-card p-5 shadow-sm sm:grid-cols-2 lg:grid-cols-5">
