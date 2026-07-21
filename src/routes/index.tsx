@@ -337,8 +337,8 @@ function Services() {
             </h2>
           </div>
           <p className="max-w-md text-muted-foreground">
-            От първоначална консултация до подпис на нотариус — оставаме до Вас
-            през целия процес.
+            От първоначална консултация до подписа при нотариус — оставаме до Вас
+            на всяка стъпка от сделката.
           </p>
         </div>
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
