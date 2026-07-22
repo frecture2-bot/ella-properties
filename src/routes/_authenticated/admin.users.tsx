@@ -1,14 +1,25 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { UserCheck, UserX } from "lucide-react";
+import { UserCheck, UserX, UserPlus } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
 import type { SettingsRow } from "@/lib/admin/queries";
+import { createAccessUser } from "@/lib/admin/users.functions";
 import { Card, CardContent } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export const Route = createFileRoute("/_authenticated/admin/users")({
   component: UsersAdmin,
@@ -17,6 +28,11 @@ export const Route = createFileRoute("/_authenticated/admin/users")({
 function UsersAdmin() {
   const [allow, setAllow] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState<"admin" | "editor">("editor");
+  const [creating, setCreating] = useState(false);
+  const createFn = useServerFn(createAccessUser);
 
   const { data, refetch } = useQuery({
     queryKey: ["admin-users-settings"],
@@ -37,6 +53,30 @@ function UsersAdmin() {
       return data;
     },
   });
+
+  async function handleCreate(e: React.FormEvent) {
+    e.preventDefault();
+    if (!email || password.length < 8) {
+      toast.error("Въведете имейл и парола (мин. 8 символа)");
+      return;
+    }
+    setCreating(true);
+    try {
+      await createFn({ data: { email, password, role } });
+      toast.success("Потребителят е създаден");
+      setEmail("");
+      setPassword("");
+      setRole("editor");
+      refetch();
+      // refetch roles list
+      void supabase.from("user_roles").select("user_id");
+      window.location.reload();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Грешка при създаване");
+    } finally {
+      setCreating(false);
+    }
+  }
 
   async function toggle(next: boolean) {
     setSaving(true);
@@ -74,6 +114,47 @@ function UsersAdmin() {
               </div>
             </div>
             <Switch checked={allow} onCheckedChange={toggle} disabled={saving} />
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card className="border-0 shadow-sm">
+        <CardContent className="p-6">
+          <div className="flex items-start gap-4">
+            <div className="grid h-12 w-12 place-items-center rounded-xl bg-gold/20 text-navy">
+              <UserPlus className="h-5 w-5" />
+            </div>
+            <div className="flex-1">
+              <h3 className="font-display text-xl text-navy">Създай потребител с достъп</h3>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Създайте акаунт директно с роля admin или editor. Потребителят ще може веднага да влезе.
+              </p>
+              <form onSubmit={handleCreate} className="mt-5 grid gap-4 md:grid-cols-[1fr_1fr_180px_auto]">
+                <div>
+                  <Label className="text-xs">Имейл</Label>
+                  <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="name@example.com" required />
+                </div>
+                <div>
+                  <Label className="text-xs">Парола</Label>
+                  <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="мин. 8 символа" minLength={8} required />
+                </div>
+                <div>
+                  <Label className="text-xs">Роля</Label>
+                  <Select value={role} onValueChange={(v) => setRole(v as "admin" | "editor")}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="admin">Администратор</SelectItem>
+                      <SelectItem value="editor">Редактор</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="flex items-end">
+                  <Button type="submit" disabled={creating} className="bg-navy text-white hover:bg-navy/90">
+                    {creating ? "Създаване..." : "Създай"}
+                  </Button>
+                </div>
+              </form>
+            </div>
           </div>
         </CardContent>
       </Card>
