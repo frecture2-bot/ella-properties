@@ -10,8 +10,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { requireAdmin } from "@/lib/admin/guards";
 
 export const Route = createFileRoute("/_authenticated/admin/settings")({
+  beforeLoad: ({ context }) => requireAdmin(context),
   component: SettingsAdmin,
 });
 

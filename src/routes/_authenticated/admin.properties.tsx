@@ -16,7 +16,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Switch } from "@/components/ui/switch";
 
+import { requireAdmin } from "@/lib/admin/guards";
+
 export const Route = createFileRoute("/_authenticated/admin/properties")({
+  beforeLoad: ({ context }) => requireAdmin(context),
   component: PropertiesAdmin,
 });
 

@@ -21,18 +21,27 @@ export const Route = createFileRoute("/_authenticated/admin")({
   component: AdminLayout,
 });
 
-const NAV = [
+type NavItem = {
+  to: string;
+  label: string;
+  icon: typeof LayoutDashboard;
+  exact?: boolean;
+  adminOnly?: boolean;
+};
+
+const NAV: NavItem[] = [
   { to: "/admin", label: "Табло", icon: LayoutDashboard, exact: true },
-  { to: "/admin/properties", label: "Имоти", icon: Home },
+  { to: "/admin/properties", label: "Имоти", icon: Home, adminOnly: true },
   { to: "/admin/inquiries", label: "Запитвания", icon: MessageSquare },
-  { to: "/admin/team", label: "Екип", icon: Users },
-  { to: "/admin/users", label: "Потребители", icon: Users },
-  { to: "/admin/settings", label: "Настройки", icon: Settings },
-] as const;
+  { to: "/admin/team", label: "Екип", icon: Users, adminOnly: true },
+  { to: "/admin/users", label: "Потребители", icon: Users, adminOnly: true },
+  { to: "/admin/settings", label: "Настройки", icon: Settings, adminOnly: true },
+];
 
 function AdminLayout() {
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { role, isAdmin } = Route.useRouteContext();
   const [email, setEmail] = useState<string>("");
   const [open, setOpen] = useState(false);
 
@@ -47,6 +56,8 @@ function AdminLayout() {
 
   const isActive = (to: string, exact?: boolean) =>
     exact ? pathname === to : pathname.startsWith(to);
+
+  const items = NAV.filter((n) => (n.adminOnly ? isAdmin : true));
 
   return (
     <div className="flex min-h-screen w-full bg-slate-50 text-slate-900">
@@ -69,8 +80,8 @@ function AdminLayout() {
           </div>
         </div>
         <nav className="flex flex-col gap-1 p-3">
-          {NAV.map((n) => {
-            const active = isActive(n.to, "exact" in n ? n.exact : false);
+          {items.map((n) => {
+            const active = isActive(n.to, n.exact);
             return (
               <Link
                 key={n.to}
@@ -91,6 +102,9 @@ function AdminLayout() {
         </nav>
         <div className="absolute inset-x-0 bottom-0 border-t border-white/10 p-3">
           <div className="px-2 py-1 text-xs text-white/50 truncate">{email}</div>
+          <div className="px-2 pb-1 text-[10px] uppercase tracking-widest text-gold/70">
+            {role === "admin" ? "Администратор" : "Редактор"}
+          </div>
           <button
             onClick={signOut}
             className="mt-1 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-white/75 hover:bg-white/5 hover:text-white"
