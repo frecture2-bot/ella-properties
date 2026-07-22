@@ -8,6 +8,7 @@ import { UserCheck, UserX, UserPlus } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import type { SettingsRow } from "@/lib/admin/queries";
 import { createAccessUser } from "@/lib/admin/users.functions";
+import { requireAdmin } from "@/lib/admin/guards";
 import { Card, CardContent } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -22,6 +23,7 @@ import {
 } from "@/components/ui/select";
 
 export const Route = createFileRoute("/_authenticated/admin/users")({
+  beforeLoad: ({ context }) => requireAdmin(context),
   component: UsersAdmin,
 });
 
