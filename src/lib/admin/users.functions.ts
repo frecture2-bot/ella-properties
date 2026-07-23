@@ -7,6 +7,12 @@ const createUserSchema = z.object({
   email: z.string().email().max(200),
   password: z.string().min(8).max(100),
   role: z.enum(["admin", "editor"]),
+  name: z.string().trim().min(1).max(100),
+});
+
+const updateNameSchema = z.object({
+  user_id: z.string().uuid(),
+  name: z.string().trim().min(1).max(100),
 });
 
 export const createAccessUser = createServerFn({ method: "POST" })
@@ -40,5 +46,34 @@ export const createAccessUser = createServerFn({ method: "POST" })
       throw new Error(insErr.message);
     }
 
+    const { error: profErr } = await supabaseAdmin
+      .from("profiles")
+      .upsert({ user_id: created.user.id, display_name: data.name });
+    if (profErr) {
+      await supabaseAdmin.auth.admin.deleteUser(created.user.id);
+      throw new Error(profErr.message);
+    }
+
     return { id: created.user.id, email: created.user.email };
+  });
+
+export const updateUserName = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => updateNameSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    const { data: adminRow, error: roleErr } = await context.supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", context.userId)
+      .eq("role", "admin")
+      .maybeSingle();
+    if (roleErr) throw new Error(roleErr.message);
+    if (!adminRow) throw new Response("Forbidden", { status: 403 });
+
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin
+      .from("profiles")
+      .upsert({ user_id: data.user_id, display_name: data.name });
+    if (error) throw new Error(error.message);
+    return { ok: true };
   });

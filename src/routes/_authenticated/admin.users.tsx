@@ -7,13 +7,14 @@ import { UserCheck, UserX, UserPlus } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
 import type { SettingsRow } from "@/lib/admin/queries";
-import { createAccessUser } from "@/lib/admin/users.functions";
+import { createAccessUser, updateUserName } from "@/lib/admin/users.functions";
 import { requireAdmin } from "@/lib/admin/guards";
 import { Card, CardContent } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Pencil, Check, X } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -32,9 +33,13 @@ function UsersAdmin() {
   const [saving, setSaving] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
   const [role, setRole] = useState<"admin" | "editor">("editor");
   const [creating, setCreating] = useState(false);
   const createFn = useServerFn(createAccessUser);
+  const updateNameFn = useServerFn(updateUserName);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingName, setEditingName] = useState("");
 
   const { data, refetch } = useQuery({
     queryKey: ["admin-users-settings"],
@@ -56,18 +61,30 @@ function UsersAdmin() {
     },
   });
 
+  const { data: profiles, refetch: refetchProfiles } = useQuery({
+    queryKey: ["admin-users-profiles"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("profiles").select("user_id, display_name");
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const nameByUserId = new Map((profiles ?? []).map((p) => [p.user_id, p.display_name] as const));
+
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault();
-    if (!email || password.length < 8) {
-      toast.error("Въведете имейл и парола (мин. 8 символа)");
+    if (!email || password.length < 8 || !name.trim()) {
+      toast.error("Въведете име, имейл и парола (мин. 8 символа)");
       return;
     }
     setCreating(true);
     try {
-      await createFn({ data: { email, password, role } });
+      await createFn({ data: { email, password, role, name: name.trim() } });
       toast.success("Потребителят е създаден");
       setEmail("");
       setPassword("");
+      setName("");
       setRole("editor");
       refetch();
       // refetch roles list
@@ -77,6 +94,19 @@ function UsersAdmin() {
       toast.error(err instanceof Error ? err.message : "Грешка при създаване");
     } finally {
       setCreating(false);
+    }
+  }
+
+  async function saveName(userId: string) {
+    const trimmed = editingName.trim();
+    if (!trimmed) return toast.error("Въведете име");
+    try {
+      await updateNameFn({ data: { user_id: userId, name: trimmed } });
+      toast.success("Името е обновено");
+      setEditingId(null);
+      refetchProfiles();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Грешка");
     }
   }
 
@@ -131,7 +161,11 @@ function UsersAdmin() {
               <p className="mt-1 text-sm text-muted-foreground">
                 Създайте акаунт директно с роля admin или editor. Потребителят ще може веднага да влезе.
               </p>
-              <form onSubmit={handleCreate} className="mt-5 grid gap-4 md:grid-cols-[1fr_1fr_180px_auto]">
+              <form onSubmit={handleCreate} className="mt-5 grid gap-4 md:grid-cols-[1fr_1fr_1fr_180px_auto]">
+                <div>
+                  <Label className="text-xs">Име</Label>
+                  <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Иван Иванов" required maxLength={100} />
+                </div>
                 <div>
                   <Label className="text-xs">Имейл</Label>
                   <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="name@example.com" required />
@@ -169,23 +203,43 @@ function UsersAdmin() {
             <table className="min-w-full text-sm">
               <thead className="text-left text-xs uppercase tracking-wider text-muted-foreground">
                 <tr>
+                  <th className="py-2 pr-6">Име</th>
                   <th className="py-2 pr-6">User ID</th>
                   <th className="py-2 pr-6">Роля</th>
-                  <th className="py-2">Дата</th>
+                  <th className="py-2 pr-6">Дата</th>
+                  <th className="py-2"></th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
                 {(roles ?? []).map((r) => (
                   <tr key={`${r.user_id}-${r.role}`}>
+                    <td className="py-3 pr-6">
+                      {editingId === r.user_id ? (
+                        <div className="flex items-center gap-1">
+                          <Input value={editingName} onChange={(e) => setEditingName(e.target.value)} className="h-8 w-48" maxLength={100} />
+                          <Button size="icon" variant="ghost" onClick={() => saveName(r.user_id)}><Check className="h-4 w-4 text-emerald-600" /></Button>
+                          <Button size="icon" variant="ghost" onClick={() => setEditingId(null)}><X className="h-4 w-4" /></Button>
+                        </div>
+                      ) : (
+                        <span className="font-medium text-navy">{nameByUserId.get(r.user_id) || <span className="text-muted-foreground">—</span>}</span>
+                      )}
+                    </td>
                     <td className="py-3 pr-6 font-mono text-xs">{r.user_id}</td>
                     <td className="py-3 pr-6">
                       <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${r.role === "admin" ? "bg-gold/20 text-navy" : "bg-slate-100 text-slate-700"}`}>{r.role}</span>
                     </td>
-                    <td className="py-3 text-muted-foreground">{new Date(r.created_at).toLocaleDateString("bg-BG")}</td>
+                    <td className="py-3 pr-6 text-muted-foreground">{new Date(r.created_at).toLocaleDateString("bg-BG")}</td>
+                    <td className="py-3 text-right">
+                      {editingId !== r.user_id && (
+                        <Button size="icon" variant="ghost" onClick={() => { setEditingId(r.user_id); setEditingName(nameByUserId.get(r.user_id) ?? ""); }}>
+                          <Pencil className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </td>
                   </tr>
                 ))}
                 {(roles ?? []).length === 0 && (
-                  <tr><td colSpan={3} className="py-8 text-center text-muted-foreground">Няма записи</td></tr>
+                  <tr><td colSpan={5} className="py-8 text-center text-muted-foreground">Няма записи</td></tr>
                 )}
               </tbody>
             </table>
