@@ -164,7 +164,7 @@ function UsersAdmin() {
               <form onSubmit={handleCreate} className="mt-5 grid gap-4 md:grid-cols-[1fr_1fr_1fr_180px_auto]">
                 <div>
                   <Label className="text-xs">Име</Label>
-                  <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Иван Иванов" required maxLength={100} />
+                  <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Име" required maxLength={100} />
                 </div>
                 <div>
                   <Label className="text-xs">Имейл</Label>
