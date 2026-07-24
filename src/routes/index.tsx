@@ -18,6 +18,12 @@ import {
   MessageCircle,
   Menu,
   X,
+  Award,
+  Shield,
+  Users,
+  TrendingUp,
+  Handshake,
+  Briefcase,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -40,14 +46,17 @@ import { properties, type PropertyType } from "@/data/properties";
 import { supabase } from "@/integrations/supabase/client";
 import { useSiteSettings, type PublicSettings } from "@/hooks/use-site-settings";
 
-const PHONE_1 = "+359 88 481 6232";
-const PHONE_2 = "+359 88 438 8022";
-const PHONE_1_TEL = "+359884816232";
-const WHATSAPP = "https://wa.me/359884816232";
-const VIBER = "viber://chat?number=%2B359884816232";
-const MAPS_URL = "https://maps.app.goo.gl/gWxiPmH7sDt9MtwBA";
-const MAPS_EMBED =
-  "https://www.google.com/maps?q=%D1%83%D0%BB.+%D0%A0%D0%B0%D0%B9%D0%BA%D0%BE+%D0%94%D0%B0%D1%81%D0%BA%D0%B0%D0%BB%D0%BE%D0%B2+4,+%D0%9F%D0%B5%D1%80%D0%BD%D0%B8%D0%BA&output=embed";
+const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  Home: HomeIcon, Key, Building2, FileText, Award, Shield, Users, TrendingUp,
+  Star, Handshake, Briefcase, MapPin, Phone, Mail, Check,
+};
+const iconOf = (name: string) => ICONS[name] ?? HomeIcon;
+
+const telHref = (n?: string) => `tel:${(n ?? "").replace(/\s+/g, "")}`;
+const waHref = (n?: string) =>
+  `https://wa.me/${(n ?? "").replace(/[^0-9]/g, "")}`;
+const viberHref = (n?: string) =>
+  `viber://chat?number=%2B${(n ?? "").replace(/[^0-9]/g, "")}`;
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -73,18 +82,18 @@ function HomePage() {
   return (
     <div className="min-h-screen bg-background font-sans text-foreground antialiased">
       <BrandStyle primary={settings.primary_color} accent={settings.accent_color} />
-      <Header />
+      <Header settings={settings} />
       <main>
         <Hero settings={settings} />
         <About settings={settings} />
-        <Services />
-        <Catalog />
-        <WhyUs />
-        <Testimonials />
-        <Contact />
+        <Services settings={settings} />
+        <Catalog settings={settings} />
+        <WhyUs settings={settings} />
+        <Testimonials settings={settings} />
+        <Contact settings={settings} />
       </main>
-      <Footer />
-      <FloatingContacts />
+      <Footer settings={settings} />
+      <FloatingContacts settings={settings} />
       <Toaster position="top-center" />
     </div>
   );
@@ -97,25 +106,17 @@ function BrandStyle({ primary, accent }: { primary: string; accent: string }) {
 
 /* ---------------- Header ---------------- */
 
-const NAV = [
-  { href: "#about", label: "За нас" },
-  { href: "#services", label: "Услуги" },
-  { href: "#catalog", label: "Имоти" },
-  { href: "#why", label: "Защо нас" },
-  { href: "#testimonials", label: "Отзиви" },
-  { href: "#contact", label: "Контакти" },
-];
-
-function Header() {
+function Header({ settings }: { settings: PublicSettings }) {
   const [open, setOpen] = useState(false);
+  const nav = settings.nav_links ?? [];
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
         <a href="#top" className="flex items-center gap-2">
-          <Logo />
+          <Logo settings={settings} />
         </a>
         <nav className="hidden items-center gap-8 lg:flex">
-          {NAV.map((n) => (
+          {nav.map((n) => (
             <a
               key={n.href}
               href={n.href}
@@ -127,9 +128,9 @@ function Header() {
         </nav>
         <div className="hidden lg:flex">
           <Button asChild variant="default" className="bg-navy text-white hover:bg-navy-deep">
-            <a href={`tel:${PHONE_1_TEL}`}>
+            <a href={telHref(settings.phone1)}>
               <Phone className="mr-2 h-4 w-4" />
-              {PHONE_1}
+              {settings.phone1}
             </a>
           </Button>
         </div>
@@ -144,7 +145,7 @@ function Header() {
       {open && (
         <div className="border-t border-border/60 bg-background lg:hidden">
           <nav className="mx-auto flex max-w-7xl flex-col gap-1 px-5 py-3">
-            {NAV.map((n) => (
+            {nav.map((n) => (
               <a
                 key={n.href}
                 href={n.href}
@@ -155,11 +156,11 @@ function Header() {
               </a>
             ))}
             <a
-              href={`tel:${PHONE_1_TEL}`}
+              href={telHref(settings.phone1)}
               className="mt-2 inline-flex items-center justify-center rounded-md bg-navy px-4 py-3 text-sm font-medium text-white"
             >
               <Phone className="mr-2 h-4 w-4" />
-              {PHONE_1}
+              {settings.phone1}
             </a>
           </nav>
         </div>
@@ -168,18 +169,24 @@ function Header() {
   );
 }
 
-function Logo() {
+function Logo({ settings }: { settings: PublicSettings }) {
+  if (settings.logo_url) {
+    return (
+      <img src={settings.logo_url} alt={settings.brand_name} className="h-10 w-auto" />
+    );
+  }
+  const letter = (settings.brand_name || "Е").trim().charAt(0);
   return (
     <span className="flex items-center gap-2">
       <span className="grid h-10 w-10 place-items-center rounded-full bg-navy text-gold ring-1 ring-gold/40">
-        <span className="font-display text-xl font-semibold leading-none">Е</span>
+        <span className="font-display text-xl font-semibold leading-none">{letter}</span>
       </span>
       <span className="flex flex-col leading-none">
         <span className="font-display text-lg font-semibold tracking-wide text-navy">
-          Елла
+          {settings.brand_name}
         </span>
         <span className="text-[10px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
-          Недвижими имоти
+          {settings.brand_tagline}
         </span>
       </span>
     </span>
@@ -302,53 +309,32 @@ function About({ settings }: { settings: PublicSettings }) {
 
 /* ---------------- Services ---------------- */
 
-const SERVICES = [
-  {
-    icon: HomeIcon,
-    title: "Продажба на имоти",
-    items: ["Апартаменти", "Къщи", "Парцели", "Бизнес имоти"],
-  },
-  {
-    icon: Key,
-    title: "Покупка на имот",
-    items: ["Лична консултация", "Подбор на подходящи оферти", "Организирани огледи"],
-  },
-  {
-    icon: Building2,
-    title: "Наеми",
-    items: ["Жилищни имоти", "Търговски площи", "Дългосрочно отдаване"],
-  },
-  {
-    icon: FileText,
-    title: "Консултации",
-    items: ["Документи и нотариус", "Оценка на сделка", "Финансиране и кредити"],
-  },
-];
-
-function Services() {
+function Services({ settings }: { settings: PublicSettings }) {
+  const services = settings.services ?? [];
   return (
     <section id="services" className="bg-muted/50 py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
         <div className="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-end">
           <div className="max-w-2xl">
-            <SectionEyebrow>Нашите услуги</SectionEyebrow>
+            <SectionEyebrow>{settings.services_eyebrow}</SectionEyebrow>
             <h2 className="mt-4 font-display text-4xl font-medium text-navy sm:text-5xl">
-              Пълно съдействие на всяка стъпка
+              {settings.services_title}
             </h2>
           </div>
           <p className="max-w-md text-muted-foreground">
-            От първоначална консултация до подписа при нотариус — оставаме до Вас
-            на всяка стъпка от сделката.
+            {settings.services_subtitle}
           </p>
         </div>
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {SERVICES.map((s) => (
+          {services.map((s) => {
+            const Icon = iconOf(s.icon);
+            return (
             <div
               key={s.title}
               className="group flex flex-col rounded-2xl border border-border bg-card p-7 transition-all hover:-translate-y-1 hover:border-gold hover:shadow-xl"
             >
               <div className="grid h-12 w-12 place-items-center rounded-xl bg-navy text-gold ring-1 ring-gold/30">
-                <s.icon className="h-5 w-5" />
+                <Icon className="h-5 w-5" />
               </div>
               <h3 className="mt-6 font-display text-2xl text-navy">{s.title}</h3>
               <ul className="mt-4 space-y-2 text-sm text-foreground/75">
@@ -360,7 +346,8 @@ function Services() {
                 ))}
               </ul>
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
@@ -377,7 +364,7 @@ const PROPERTY_TYPES: (PropertyType | "Всички")[] = [
   "Бизнес имот",
 ];
 
-function Catalog() {
+function Catalog({ settings }: { settings: PublicSettings }) {
   const [type, setType] = useState<string>("Всички");
   const [listing, setListing] = useState<string>("Всички");
   const [district, setDistrict] = useState<string>("Всички");
@@ -403,9 +390,9 @@ function Catalog() {
   return (
     <section id="catalog" className="bg-background py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
-        <SectionEyebrow>Каталог с имоти</SectionEyebrow>
+        <SectionEyebrow>{settings.catalog_eyebrow}</SectionEyebrow>
         <h2 className="mt-4 font-display text-4xl font-medium text-navy sm:text-5xl">
-          Топ оферти
+          {settings.catalog_title}
         </h2>
 
         <div className="mt-10 grid gap-4 rounded-2xl border border-border bg-card p-5 shadow-sm sm:grid-cols-2 lg:grid-cols-5">
@@ -541,16 +528,8 @@ function PropertyCard({ p }: { p: (typeof properties)[number] }) {
 
 /* ---------------- Why us ---------------- */
 
-const REASONS = [
-  "Професионално и лично отношение",
-  "Задълбочено познаване на пазара в област Перник и София",
-  "Само реални и проверени оферти",
-  "Прозрачност, коректност и дискретност",
-  "Индивидуален подход към всеки клиент",
-  "Пълно правно и нотариално съдействие",
-];
-
-function WhyUs() {
+function WhyUs({ settings }: { settings: PublicSettings }) {
+  const reasons = settings.why_reasons ?? [];
   return (
     <section id="why" className="relative overflow-hidden bg-navy-deep py-24 text-white lg:py-32">
       <div className="absolute inset-0 opacity-[0.08]" style={{
@@ -558,12 +537,12 @@ function WhyUs() {
         backgroundSize: "32px 32px",
       }} />
       <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
-        <SectionEyebrow tone="gold">Защо да изберете нас</SectionEyebrow>
+        <SectionEyebrow tone="gold">{settings.why_eyebrow}</SectionEyebrow>
         <h2 className="mt-4 max-w-3xl font-display text-4xl font-medium sm:text-5xl">
-          Доверие, изградено върху <span className="italic text-gold">резултати</span>
+          {settings.why_title}
         </h2>
         <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {REASONS.map((r, i) => (
+          {reasons.map((r, i) => (
             <div
               key={r}
               className="flex items-start gap-4 rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur transition-colors hover:border-gold/50"
@@ -582,39 +561,19 @@ function WhyUs() {
 
 /* ---------------- Testimonials ---------------- */
 
-const TESTIMONIALS = [
-  {
-    name: "Мария Иванова",
-    role: "Купувач, Перник",
-    text:
-      "Изключително професионално отношение от първия контакт до подписването на договора. Намериха ни апартамента, който мечтаехме.",
-  },
-  {
-    name: "Георги Петров",
-    role: "Продавач",
-    text:
-      "Реализираха сделката бързо и на коректна цена. Спокойствието през целия процес е безценно.",
-  },
-  {
-    name: "Елена Костова",
-    role: "Наемател",
-    text:
-      "Любезни, отзивчиви и с реални оферти. Препоръчвам Елла Недвижими Имоти на всеки!",
-  },
-];
-
-function Testimonials() {
+function Testimonials({ settings }: { settings: PublicSettings }) {
+  const items = settings.testimonials ?? [];
   return (
     <section id="testimonials" className="bg-background py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
         <div className="max-w-2xl">
-          <SectionEyebrow>Отзиви от клиенти</SectionEyebrow>
+          <SectionEyebrow>{settings.testimonials_eyebrow}</SectionEyebrow>
           <h2 className="mt-4 font-display text-4xl font-medium text-navy sm:text-5xl">
-            Думите на хората, които ни се довериха
+            {settings.testimonials_title}
           </h2>
         </div>
         <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {TESTIMONIALS.map((t) => (
+          {items.map((t) => (
             <figure
               key={t.name}
               className="flex flex-col rounded-2xl border border-border bg-card p-8 shadow-sm"
@@ -641,7 +600,7 @@ function Testimonials() {
 
 /* ---------------- Contact ---------------- */
 
-function Contact() {
+function Contact({ settings }: { settings: PublicSettings }) {
   const [form, setForm] = useState({ name: "", phone: "", email: "", message: "" });
   const [sending, setSending] = useState(false);
 
@@ -675,14 +634,9 @@ function Contact() {
     <section id="contact" className="bg-muted/50 py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
         <div className="max-w-2xl">
-          <SectionEyebrow>Контакти</SectionEyebrow>
-          <h2 className="mt-4 font-display text-4xl font-medium text-navy sm:text-5xl">
-            Да поговорим за Вашия имот
-          </h2>
-          <p className="mt-4 text-muted-foreground">
-            Свържете се с нас по удобен за Вас начин или ни изпратете запитване —
-            ще Ви отговорим в рамките на същия работен ден.
-          </p>
+          <SectionEyebrow>{settings.contact_eyebrow}</SectionEyebrow>
+          <h2 className="mt-4 font-display text-4xl font-medium text-navy sm:text-5xl">{settings.contact_title}</h2>
+          <p className="mt-4 text-muted-foreground">{settings.contact_subtitle}</p>
         </div>
 
         <div className="mt-12 grid gap-8 lg:grid-cols-5">
@@ -691,27 +645,27 @@ function Contact() {
               icon={Phone}
               title="Телефони"
               lines={[
-                { text: PHONE_1, href: `tel:${PHONE_1_TEL}` },
-                { text: PHONE_2, href: `tel:+359884388022` },
+                ...(settings.phone1 ? [{ text: settings.phone1, href: telHref(settings.phone1) }] : []),
+                ...(settings.phone2 ? [{ text: settings.phone2, href: telHref(settings.phone2) }] : []),
               ]}
             />
             <ContactRow
               icon={MapPin}
               title="Адрес"
               lines={[
-                { text: `Център, ул. „Райко Даскалов" 4`, href: MAPS_URL },
-                { text: "2300 Перник, България" },
+                { text: settings.address, href: settings.contact_map_url || undefined },
               ]}
             />
             <ContactRow
               icon={Mail}
               title="Имейл"
-              lines={[{ text: "office@ella-imoti.bg", href: "mailto:office@ella-imoti.bg" }]}
+              lines={[{ text: settings.email, href: `mailto:${settings.email}` }]}
             />
+            {settings.contact_map_embed && (
             <div className="overflow-hidden rounded-2xl border border-border shadow-sm">
               <iframe
                 title="Карта — Елла Недвижими Имоти"
-                src={MAPS_EMBED}
+                src={settings.contact_map_embed}
                 width="100%"
                 height="280"
                 style={{ border: 0 }}
@@ -719,6 +673,7 @@ function Contact() {
                 referrerPolicy="no-referrer-when-downgrade"
               />
             </div>
+            )}
           </div>
 
           <form
@@ -823,31 +778,32 @@ function ContactRow({
 
 /* ---------------- Footer ---------------- */
 
-function Footer() {
+function Footer({ settings }: { settings: PublicSettings }) {
+  const nav = settings.nav_links ?? [];
+  const copyright = (settings.footer_copyright || "").replace("{year}", String(new Date().getFullYear()));
   return (
     <footer className="border-t border-border bg-navy-deep text-white/80">
       <div className="mx-auto grid max-w-7xl gap-10 px-5 py-14 sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
         <div>
           <div className="flex items-center gap-2">
             <span className="grid h-10 w-10 place-items-center rounded-full bg-gold text-navy-deep ring-1 ring-gold/30">
-              <span className="font-display text-xl font-semibold">Е</span>
+              <span className="font-display text-xl font-semibold">{(settings.brand_name || "Е").charAt(0)}</span>
             </span>
             <div>
-              <div className="font-display text-lg text-white">Елла</div>
+              <div className="font-display text-lg text-white">{settings.brand_name}</div>
               <div className="text-[10px] uppercase tracking-[0.22em] text-white/60">
-                Недвижими имоти
+                {settings.brand_tagline}
               </div>
             </div>
           </div>
           <p className="mt-5 text-sm leading-relaxed text-white/65">
-            Професионална агенция за недвижими имоти в област Перник и София.
-            Сделки с доверие и лично отношение от 2009 г.
+            {settings.footer_description}
           </p>
         </div>
         <div>
           <h4 className="font-display text-base text-gold">Навигация</h4>
           <ul className="mt-4 space-y-2 text-sm">
-            {NAV.map((n) => (
+            {nav.map((n) => (
               <li key={n.href}>
                 <a href={n.href} className="hover:text-gold">{n.label}</a>
               </li>
@@ -857,22 +813,22 @@ function Footer() {
         <div>
           <h4 className="font-display text-base text-gold">Контакт</h4>
           <ul className="mt-4 space-y-2 text-sm">
-            <li><a href={`tel:${PHONE_1_TEL}`} className="hover:text-gold">{PHONE_1}</a></li>
-            <li><a href="tel:+359884388022" className="hover:text-gold">{PHONE_2}</a></li>
-            <li><a href={MAPS_URL} target="_blank" rel="noreferrer" className="hover:text-gold">{`ул. „Райко Даскалов" 4, Перник`}</a></li>
+            {settings.phone1 && <li><a href={telHref(settings.phone1)} className="hover:text-gold">{settings.phone1}</a></li>}
+            {settings.phone2 && <li><a href={telHref(settings.phone2)} className="hover:text-gold">{settings.phone2}</a></li>}
+            {settings.address && <li><a href={settings.contact_map_url || "#"} target="_blank" rel="noreferrer" className="hover:text-gold">{settings.address}</a></li>}
           </ul>
         </div>
         <div>
           <h4 className="font-display text-base text-gold">Социални мрежи</h4>
           <div className="mt-4 flex gap-3">
-            <SocialLink href="https://facebook.com" label="Facebook"><Facebook className="h-4 w-4" /></SocialLink>
-            <SocialLink href="https://instagram.com" label="Instagram"><Instagram className="h-4 w-4" /></SocialLink>
-            <SocialLink href={WHATSAPP} label="WhatsApp"><MessageCircle className="h-4 w-4" /></SocialLink>
+            {settings.facebook_url && <SocialLink href={settings.facebook_url} label="Facebook"><Facebook className="h-4 w-4" /></SocialLink>}
+            {settings.instagram_url && <SocialLink href={settings.instagram_url} label="Instagram"><Instagram className="h-4 w-4" /></SocialLink>}
+            {settings.whatsapp_number && <SocialLink href={waHref(settings.whatsapp_number)} label="WhatsApp"><MessageCircle className="h-4 w-4" /></SocialLink>}
           </div>
         </div>
       </div>
       <div className="border-t border-white/10 py-6 text-center text-xs text-white/50">
-        © {new Date().getFullYear()} Елла Недвижими Имоти. Всички права запазени.
+        {copyright}
       </div>
     </footer>
   );
@@ -894,15 +850,19 @@ function SocialLink({ href, label, children }: { href: string; label: string; ch
 
 /* ---------------- Floating contacts ---------------- */
 
-function FloatingContacts() {
+function FloatingContacts({ settings }: { settings: PublicSettings }) {
   return (
     <div className="fixed bottom-5 right-5 z-40 flex flex-col gap-3">
-      <FloatBtn href={WHATSAPP} label="WhatsApp" className="bg-[#25D366] hover:brightness-110">
+      {settings.whatsapp_number && (
+      <FloatBtn href={waHref(settings.whatsapp_number)} label="WhatsApp" className="bg-[#25D366] hover:brightness-110">
         <MessageCircle className="h-6 w-6" />
       </FloatBtn>
-      <FloatBtn href={VIBER} label="Viber" className="bg-[#7360F2] hover:brightness-110">
+      )}
+      {settings.viber_number && (
+      <FloatBtn href={viberHref(settings.viber_number)} label="Viber" className="bg-[#7360F2] hover:brightness-110">
         <Phone className="h-5 w-5" />
       </FloatBtn>
+      )}
     </div>
   );
 }
