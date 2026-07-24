@@ -561,39 +561,19 @@ function WhyUs({ settings }: { settings: PublicSettings }) {
 
 /* ---------------- Testimonials ---------------- */
 
-const TESTIMONIALS = [
-  {
-    name: "Мария Иванова",
-    role: "Купувач, Перник",
-    text:
-      "Изключително професионално отношение от първия контакт до подписването на договора. Намериха ни апартамента, който мечтаехме.",
-  },
-  {
-    name: "Георги Петров",
-    role: "Продавач",
-    text:
-      "Реализираха сделката бързо и на коректна цена. Спокойствието през целия процес е безценно.",
-  },
-  {
-    name: "Елена Костова",
-    role: "Наемател",
-    text:
-      "Любезни, отзивчиви и с реални оферти. Препоръчвам Елла Недвижими Имоти на всеки!",
-  },
-];
-
-function Testimonials() {
+function Testimonials({ settings }: { settings: PublicSettings }) {
+  const items = settings.testimonials ?? [];
   return (
     <section id="testimonials" className="bg-background py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
         <div className="max-w-2xl">
-          <SectionEyebrow>Отзиви от клиенти</SectionEyebrow>
+          <SectionEyebrow>{settings.testimonials_eyebrow}</SectionEyebrow>
           <h2 className="mt-4 font-display text-4xl font-medium text-navy sm:text-5xl">
-            Думите на хората, които ни се довериха
+            {settings.testimonials_title}
           </h2>
         </div>
         <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {TESTIMONIALS.map((t) => (
+          {items.map((t) => (
             <figure
               key={t.name}
               className="flex flex-col rounded-2xl border border-border bg-card p-8 shadow-sm"
@@ -620,7 +600,7 @@ function Testimonials() {
 
 /* ---------------- Contact ---------------- */
 
-function Contact() {
+function Contact({ settings }: { settings: PublicSettings }) {
   const [form, setForm] = useState({ name: "", phone: "", email: "", message: "" });
   const [sending, setSending] = useState(false);
 
@@ -654,14 +634,9 @@ function Contact() {
     <section id="contact" className="bg-muted/50 py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
         <div className="max-w-2xl">
-          <SectionEyebrow>Контакти</SectionEyebrow>
-          <h2 className="mt-4 font-display text-4xl font-medium text-navy sm:text-5xl">
-            Да поговорим за Вашия имот
-          </h2>
-          <p className="mt-4 text-muted-foreground">
-            Свържете се с нас по удобен за Вас начин или ни изпратете запитване —
-            ще Ви отговорим в рамките на същия работен ден.
-          </p>
+          <SectionEyebrow>{settings.contact_eyebrow}</SectionEyebrow>
+          <h2 className="mt-4 font-display text-4xl font-medium text-navy sm:text-5xl">{settings.contact_title}</h2>
+          <p className="mt-4 text-muted-foreground">{settings.contact_subtitle}</p>
         </div>
 
         <div className="mt-12 grid gap-8 lg:grid-cols-5">
@@ -670,27 +645,27 @@ function Contact() {
               icon={Phone}
               title="Телефони"
               lines={[
-                { text: PHONE_1, href: `tel:${PHONE_1_TEL}` },
-                { text: PHONE_2, href: `tel:+359884388022` },
+                ...(settings.phone1 ? [{ text: settings.phone1, href: telHref(settings.phone1) }] : []),
+                ...(settings.phone2 ? [{ text: settings.phone2, href: telHref(settings.phone2) }] : []),
               ]}
             />
             <ContactRow
               icon={MapPin}
               title="Адрес"
               lines={[
-                { text: `Център, ул. „Райко Даскалов" 4`, href: MAPS_URL },
-                { text: "2300 Перник, България" },
+                { text: settings.address, href: settings.contact_map_url || undefined },
               ]}
             />
             <ContactRow
               icon={Mail}
               title="Имейл"
-              lines={[{ text: "office@ella-imoti.bg", href: "mailto:office@ella-imoti.bg" }]}
+              lines={[{ text: settings.email, href: `mailto:${settings.email}` }]}
             />
+            {settings.contact_map_embed && (
             <div className="overflow-hidden rounded-2xl border border-border shadow-sm">
               <iframe
                 title="Карта — Елла Недвижими Имоти"
-                src={MAPS_EMBED}
+                src={settings.contact_map_embed}
                 width="100%"
                 height="280"
                 style={{ border: 0 }}
@@ -698,6 +673,7 @@ function Contact() {
                 referrerPolicy="no-referrer-when-downgrade"
               />
             </div>
+            )}
           </div>
 
           <form
@@ -802,31 +778,32 @@ function ContactRow({
 
 /* ---------------- Footer ---------------- */
 
-function Footer() {
+function Footer({ settings }: { settings: PublicSettings }) {
+  const nav = settings.nav_links ?? [];
+  const copyright = (settings.footer_copyright || "").replace("{year}", String(new Date().getFullYear()));
   return (
     <footer className="border-t border-border bg-navy-deep text-white/80">
       <div className="mx-auto grid max-w-7xl gap-10 px-5 py-14 sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
         <div>
           <div className="flex items-center gap-2">
             <span className="grid h-10 w-10 place-items-center rounded-full bg-gold text-navy-deep ring-1 ring-gold/30">
-              <span className="font-display text-xl font-semibold">Е</span>
+              <span className="font-display text-xl font-semibold">{(settings.brand_name || "Е").charAt(0)}</span>
             </span>
             <div>
-              <div className="font-display text-lg text-white">Елла</div>
+              <div className="font-display text-lg text-white">{settings.brand_name}</div>
               <div className="text-[10px] uppercase tracking-[0.22em] text-white/60">
-                Недвижими имоти
+                {settings.brand_tagline}
               </div>
             </div>
           </div>
           <p className="mt-5 text-sm leading-relaxed text-white/65">
-            Професионална агенция за недвижими имоти в област Перник и София.
-            Сделки с доверие и лично отношение от 2009 г.
+            {settings.footer_description}
           </p>
         </div>
         <div>
           <h4 className="font-display text-base text-gold">Навигация</h4>
           <ul className="mt-4 space-y-2 text-sm">
-            {NAV.map((n) => (
+            {nav.map((n) => (
               <li key={n.href}>
                 <a href={n.href} className="hover:text-gold">{n.label}</a>
               </li>
@@ -836,22 +813,22 @@ function Footer() {
         <div>
           <h4 className="font-display text-base text-gold">Контакт</h4>
           <ul className="mt-4 space-y-2 text-sm">
-            <li><a href={`tel:${PHONE_1_TEL}`} className="hover:text-gold">{PHONE_1}</a></li>
-            <li><a href="tel:+359884388022" className="hover:text-gold">{PHONE_2}</a></li>
-            <li><a href={MAPS_URL} target="_blank" rel="noreferrer" className="hover:text-gold">{`ул. „Райко Даскалов" 4, Перник`}</a></li>
+            {settings.phone1 && <li><a href={telHref(settings.phone1)} className="hover:text-gold">{settings.phone1}</a></li>}
+            {settings.phone2 && <li><a href={telHref(settings.phone2)} className="hover:text-gold">{settings.phone2}</a></li>}
+            {settings.address && <li><a href={settings.contact_map_url || "#"} target="_blank" rel="noreferrer" className="hover:text-gold">{settings.address}</a></li>}
           </ul>
         </div>
         <div>
           <h4 className="font-display text-base text-gold">Социални мрежи</h4>
           <div className="mt-4 flex gap-3">
-            <SocialLink href="https://facebook.com" label="Facebook"><Facebook className="h-4 w-4" /></SocialLink>
-            <SocialLink href="https://instagram.com" label="Instagram"><Instagram className="h-4 w-4" /></SocialLink>
-            <SocialLink href={WHATSAPP} label="WhatsApp"><MessageCircle className="h-4 w-4" /></SocialLink>
+            {settings.facebook_url && <SocialLink href={settings.facebook_url} label="Facebook"><Facebook className="h-4 w-4" /></SocialLink>}
+            {settings.instagram_url && <SocialLink href={settings.instagram_url} label="Instagram"><Instagram className="h-4 w-4" /></SocialLink>}
+            {settings.whatsapp_number && <SocialLink href={waHref(settings.whatsapp_number)} label="WhatsApp"><MessageCircle className="h-4 w-4" /></SocialLink>}
           </div>
         </div>
       </div>
       <div className="border-t border-white/10 py-6 text-center text-xs text-white/50">
-        © {new Date().getFullYear()} Елла Недвижими Имоти. Всички права запазени.
+        {copyright}
       </div>
     </footer>
   );
