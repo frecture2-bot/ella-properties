@@ -83,6 +83,32 @@ export type SettingsRow = {
   stat3_value: string | null;
   stat3_label: string | null;
   allow_registration: boolean;
+  about_eyebrow: string | null;
+  about_stat4_value: string | null;
+  about_stat4_label: string | null;
+  nav_links: unknown;
+  services_eyebrow: string | null;
+  services_title: string | null;
+  services_subtitle: string | null;
+  services: unknown;
+  why_eyebrow: string | null;
+  why_title: string | null;
+  why_reasons: unknown;
+  testimonials_eyebrow: string | null;
+  testimonials_title: string | null;
+  testimonials: unknown;
+  catalog_eyebrow: string | null;
+  catalog_title: string | null;
+  contact_eyebrow: string | null;
+  contact_title: string | null;
+  contact_subtitle: string | null;
+  contact_map_embed: string | null;
+  contact_map_url: string | null;
+  footer_description: string | null;
+  footer_copyright: string | null;
+  seo_home_title: string | null;
+  seo_home_description: string | null;
+  seo_home_keywords: string | null;
 };
 
 export async function fetchStats() {
