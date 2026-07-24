@@ -18,6 +18,12 @@ import {
   MessageCircle,
   Menu,
   X,
+  Award,
+  Shield,
+  Users,
+  TrendingUp,
+  Handshake,
+  Briefcase,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -40,14 +46,17 @@ import { properties, type PropertyType } from "@/data/properties";
 import { supabase } from "@/integrations/supabase/client";
 import { useSiteSettings, type PublicSettings } from "@/hooks/use-site-settings";
 
-const PHONE_1 = "+359 88 481 6232";
-const PHONE_2 = "+359 88 438 8022";
-const PHONE_1_TEL = "+359884816232";
-const WHATSAPP = "https://wa.me/359884816232";
-const VIBER = "viber://chat?number=%2B359884816232";
-const MAPS_URL = "https://maps.app.goo.gl/gWxiPmH7sDt9MtwBA";
-const MAPS_EMBED =
-  "https://www.google.com/maps?q=%D1%83%D0%BB.+%D0%A0%D0%B0%D0%B9%D0%BA%D0%BE+%D0%94%D0%B0%D1%81%D0%BA%D0%B0%D0%BB%D0%BE%D0%B2+4,+%D0%9F%D0%B5%D1%80%D0%BD%D0%B8%D0%BA&output=embed";
+const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  Home: HomeIcon, Key, Building2, FileText, Award, Shield, Users, TrendingUp,
+  Star, Handshake, Briefcase, MapPin, Phone, Mail, Check,
+};
+const iconOf = (name: string) => ICONS[name] ?? HomeIcon;
+
+const telHref = (n?: string) => `tel:${(n ?? "").replace(/\s+/g, "")}`;
+const waHref = (n?: string) =>
+  `https://wa.me/${(n ?? "").replace(/[^0-9]/g, "")}`;
+const viberHref = (n?: string) =>
+  `viber://chat?number=%2B${(n ?? "").replace(/[^0-9]/g, "")}`;
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -73,18 +82,18 @@ function HomePage() {
   return (
     <div className="min-h-screen bg-background font-sans text-foreground antialiased">
       <BrandStyle primary={settings.primary_color} accent={settings.accent_color} />
-      <Header />
+      <Header settings={settings} />
       <main>
         <Hero settings={settings} />
         <About settings={settings} />
-        <Services />
-        <Catalog />
-        <WhyUs />
-        <Testimonials />
-        <Contact />
+        <Services settings={settings} />
+        <Catalog settings={settings} />
+        <WhyUs settings={settings} />
+        <Testimonials settings={settings} />
+        <Contact settings={settings} />
       </main>
-      <Footer />
-      <FloatingContacts />
+      <Footer settings={settings} />
+      <FloatingContacts settings={settings} />
       <Toaster position="top-center" />
     </div>
   );
@@ -97,25 +106,17 @@ function BrandStyle({ primary, accent }: { primary: string; accent: string }) {
 
 /* ---------------- Header ---------------- */
 
-const NAV = [
-  { href: "#about", label: "За нас" },
-  { href: "#services", label: "Услуги" },
-  { href: "#catalog", label: "Имоти" },
-  { href: "#why", label: "Защо нас" },
-  { href: "#testimonials", label: "Отзиви" },
-  { href: "#contact", label: "Контакти" },
-];
-
-function Header() {
+function Header({ settings }: { settings: PublicSettings }) {
   const [open, setOpen] = useState(false);
+  const nav = settings.nav_links ?? [];
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
         <a href="#top" className="flex items-center gap-2">
-          <Logo />
+          <Logo settings={settings} />
         </a>
         <nav className="hidden items-center gap-8 lg:flex">
-          {NAV.map((n) => (
+          {nav.map((n) => (
             <a
               key={n.href}
               href={n.href}
@@ -127,9 +128,9 @@ function Header() {
         </nav>
         <div className="hidden lg:flex">
           <Button asChild variant="default" className="bg-navy text-white hover:bg-navy-deep">
-            <a href={`tel:${PHONE_1_TEL}`}>
+            <a href={telHref(settings.phone1)}>
               <Phone className="mr-2 h-4 w-4" />
-              {PHONE_1}
+              {settings.phone1}
             </a>
           </Button>
         </div>
@@ -144,7 +145,7 @@ function Header() {
       {open && (
         <div className="border-t border-border/60 bg-background lg:hidden">
           <nav className="mx-auto flex max-w-7xl flex-col gap-1 px-5 py-3">
-            {NAV.map((n) => (
+            {nav.map((n) => (
               <a
                 key={n.href}
                 href={n.href}
@@ -155,11 +156,11 @@ function Header() {
               </a>
             ))}
             <a
-              href={`tel:${PHONE_1_TEL}`}
+              href={telHref(settings.phone1)}
               className="mt-2 inline-flex items-center justify-center rounded-md bg-navy px-4 py-3 text-sm font-medium text-white"
             >
               <Phone className="mr-2 h-4 w-4" />
-              {PHONE_1}
+              {settings.phone1}
             </a>
           </nav>
         </div>
@@ -168,18 +169,24 @@ function Header() {
   );
 }
 
-function Logo() {
+function Logo({ settings }: { settings: PublicSettings }) {
+  if (settings.logo_url) {
+    return (
+      <img src={settings.logo_url} alt={settings.brand_name} className="h-10 w-auto" />
+    );
+  }
+  const letter = (settings.brand_name || "Е").trim().charAt(0);
   return (
     <span className="flex items-center gap-2">
       <span className="grid h-10 w-10 place-items-center rounded-full bg-navy text-gold ring-1 ring-gold/40">
-        <span className="font-display text-xl font-semibold leading-none">Е</span>
+        <span className="font-display text-xl font-semibold leading-none">{letter}</span>
       </span>
       <span className="flex flex-col leading-none">
         <span className="font-display text-lg font-semibold tracking-wide text-navy">
-          Елла
+          {settings.brand_name}
         </span>
         <span className="text-[10px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
-          Недвижими имоти
+          {settings.brand_tagline}
         </span>
       </span>
     </span>
