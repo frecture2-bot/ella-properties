@@ -309,53 +309,32 @@ function About({ settings }: { settings: PublicSettings }) {
 
 /* ---------------- Services ---------------- */
 
-const SERVICES = [
-  {
-    icon: HomeIcon,
-    title: "Продажба на имоти",
-    items: ["Апартаменти", "Къщи", "Парцели", "Бизнес имоти"],
-  },
-  {
-    icon: Key,
-    title: "Покупка на имот",
-    items: ["Лична консултация", "Подбор на подходящи оферти", "Организирани огледи"],
-  },
-  {
-    icon: Building2,
-    title: "Наеми",
-    items: ["Жилищни имоти", "Търговски площи", "Дългосрочно отдаване"],
-  },
-  {
-    icon: FileText,
-    title: "Консултации",
-    items: ["Документи и нотариус", "Оценка на сделка", "Финансиране и кредити"],
-  },
-];
-
-function Services() {
+function Services({ settings }: { settings: PublicSettings }) {
+  const services = settings.services ?? [];
   return (
     <section id="services" className="bg-muted/50 py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
         <div className="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-end">
           <div className="max-w-2xl">
-            <SectionEyebrow>Нашите услуги</SectionEyebrow>
+            <SectionEyebrow>{settings.services_eyebrow}</SectionEyebrow>
             <h2 className="mt-4 font-display text-4xl font-medium text-navy sm:text-5xl">
-              Пълно съдействие на всяка стъпка
+              {settings.services_title}
             </h2>
           </div>
           <p className="max-w-md text-muted-foreground">
-            От първоначална консултация до подписа при нотариус — оставаме до Вас
-            на всяка стъпка от сделката.
+            {settings.services_subtitle}
           </p>
         </div>
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {SERVICES.map((s) => (
+          {services.map((s) => {
+            const Icon = iconOf(s.icon);
+            return (
             <div
               key={s.title}
               className="group flex flex-col rounded-2xl border border-border bg-card p-7 transition-all hover:-translate-y-1 hover:border-gold hover:shadow-xl"
             >
               <div className="grid h-12 w-12 place-items-center rounded-xl bg-navy text-gold ring-1 ring-gold/30">
-                <s.icon className="h-5 w-5" />
+                <Icon className="h-5 w-5" />
               </div>
               <h3 className="mt-6 font-display text-2xl text-navy">{s.title}</h3>
               <ul className="mt-4 space-y-2 text-sm text-foreground/75">
@@ -367,7 +346,8 @@ function Services() {
                 ))}
               </ul>
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
@@ -384,7 +364,7 @@ const PROPERTY_TYPES: (PropertyType | "Всички")[] = [
   "Бизнес имот",
 ];
 
-function Catalog() {
+function Catalog({ settings }: { settings: PublicSettings }) {
   const [type, setType] = useState<string>("Всички");
   const [listing, setListing] = useState<string>("Всички");
   const [district, setDistrict] = useState<string>("Всички");
@@ -410,9 +390,9 @@ function Catalog() {
   return (
     <section id="catalog" className="bg-background py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
-        <SectionEyebrow>Каталог с имоти</SectionEyebrow>
+        <SectionEyebrow>{settings.catalog_eyebrow}</SectionEyebrow>
         <h2 className="mt-4 font-display text-4xl font-medium text-navy sm:text-5xl">
-          Топ оферти
+          {settings.catalog_title}
         </h2>
 
         <div className="mt-10 grid gap-4 rounded-2xl border border-border bg-card p-5 shadow-sm sm:grid-cols-2 lg:grid-cols-5">
@@ -548,16 +528,8 @@ function PropertyCard({ p }: { p: (typeof properties)[number] }) {
 
 /* ---------------- Why us ---------------- */
 
-const REASONS = [
-  "Професионално и лично отношение",
-  "Задълбочено познаване на пазара в област Перник и София",
-  "Само реални и проверени оферти",
-  "Прозрачност, коректност и дискретност",
-  "Индивидуален подход към всеки клиент",
-  "Пълно правно и нотариално съдействие",
-];
-
-function WhyUs() {
+function WhyUs({ settings }: { settings: PublicSettings }) {
+  const reasons = settings.why_reasons ?? [];
   return (
     <section id="why" className="relative overflow-hidden bg-navy-deep py-24 text-white lg:py-32">
       <div className="absolute inset-0 opacity-[0.08]" style={{
@@ -565,12 +537,12 @@ function WhyUs() {
         backgroundSize: "32px 32px",
       }} />
       <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
-        <SectionEyebrow tone="gold">Защо да изберете нас</SectionEyebrow>
+        <SectionEyebrow tone="gold">{settings.why_eyebrow}</SectionEyebrow>
         <h2 className="mt-4 max-w-3xl font-display text-4xl font-medium sm:text-5xl">
-          Доверие, изградено върху <span className="italic text-gold">резултати</span>
+          {settings.why_title}
         </h2>
         <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {REASONS.map((r, i) => (
+          {reasons.map((r, i) => (
             <div
               key={r}
               className="flex items-start gap-4 rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur transition-colors hover:border-gold/50"
