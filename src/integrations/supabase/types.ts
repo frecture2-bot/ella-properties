@@ -236,6 +236,9 @@ export type Database = {
       }
       site_settings: {
         Row: {
+          about_eyebrow: string | null
+          about_stat4_label: string | null
+          about_stat4_value: string | null
           about_text: string | null
           about_text_secondary: string | null
           about_title: string | null
@@ -244,8 +247,17 @@ export type Database = {
           allow_registration: boolean
           brand_name: string | null
           brand_tagline: string | null
+          catalog_eyebrow: string | null
+          catalog_title: string | null
+          contact_eyebrow: string | null
+          contact_map_embed: string | null
+          contact_map_url: string | null
+          contact_subtitle: string | null
+          contact_title: string | null
           email: string | null
           facebook_url: string | null
+          footer_copyright: string | null
+          footer_description: string | null
           hero_cta_label: string | null
           hero_cta_link: string | null
           hero_eyebrow: string | null
@@ -257,20 +269,37 @@ export type Database = {
           id: number
           instagram_url: string | null
           logo_url: string | null
+          nav_links: Json | null
           phone1: string | null
           phone2: string | null
           primary_color: string | null
+          seo_home_description: string | null
+          seo_home_keywords: string | null
+          seo_home_title: string | null
+          services: Json | null
+          services_eyebrow: string | null
+          services_subtitle: string | null
+          services_title: string | null
           stat1_label: string | null
           stat1_value: string | null
           stat2_label: string | null
           stat2_value: string | null
           stat3_label: string | null
           stat3_value: string | null
+          testimonials: Json | null
+          testimonials_eyebrow: string | null
+          testimonials_title: string | null
           updated_at: string
           viber_number: string | null
           whatsapp_number: string | null
+          why_eyebrow: string | null
+          why_reasons: Json | null
+          why_title: string | null
         }
         Insert: {
+          about_eyebrow?: string | null
+          about_stat4_label?: string | null
+          about_stat4_value?: string | null
           about_text?: string | null
           about_text_secondary?: string | null
           about_title?: string | null
@@ -279,8 +308,17 @@ export type Database = {
           allow_registration?: boolean
           brand_name?: string | null
           brand_tagline?: string | null
+          catalog_eyebrow?: string | null
+          catalog_title?: string | null
+          contact_eyebrow?: string | null
+          contact_map_embed?: string | null
+          contact_map_url?: string | null
+          contact_subtitle?: string | null
+          contact_title?: string | null
           email?: string | null
           facebook_url?: string | null
+          footer_copyright?: string | null
+          footer_description?: string | null
           hero_cta_label?: string | null
           hero_cta_link?: string | null
           hero_eyebrow?: string | null
@@ -292,20 +330,37 @@ export type Database = {
           id?: number
           instagram_url?: string | null
           logo_url?: string | null
+          nav_links?: Json | null
           phone1?: string | null
           phone2?: string | null
           primary_color?: string | null
+          seo_home_description?: string | null
+          seo_home_keywords?: string | null
+          seo_home_title?: string | null
+          services?: Json | null
+          services_eyebrow?: string | null
+          services_subtitle?: string | null
+          services_title?: string | null
           stat1_label?: string | null
           stat1_value?: string | null
           stat2_label?: string | null
           stat2_value?: string | null
           stat3_label?: string | null
           stat3_value?: string | null
+          testimonials?: Json | null
+          testimonials_eyebrow?: string | null
+          testimonials_title?: string | null
           updated_at?: string
           viber_number?: string | null
           whatsapp_number?: string | null
+          why_eyebrow?: string | null
+          why_reasons?: Json | null
+          why_title?: string | null
         }
         Update: {
+          about_eyebrow?: string | null
+          about_stat4_label?: string | null
+          about_stat4_value?: string | null
           about_text?: string | null
           about_text_secondary?: string | null
           about_title?: string | null
@@ -314,8 +369,17 @@ export type Database = {
           allow_registration?: boolean
           brand_name?: string | null
           brand_tagline?: string | null
+          catalog_eyebrow?: string | null
+          catalog_title?: string | null
+          contact_eyebrow?: string | null
+          contact_map_embed?: string | null
+          contact_map_url?: string | null
+          contact_subtitle?: string | null
+          contact_title?: string | null
           email?: string | null
           facebook_url?: string | null
+          footer_copyright?: string | null
+          footer_description?: string | null
           hero_cta_label?: string | null
           hero_cta_link?: string | null
           hero_eyebrow?: string | null
@@ -327,18 +391,32 @@ export type Database = {
           id?: number
           instagram_url?: string | null
           logo_url?: string | null
+          nav_links?: Json | null
           phone1?: string | null
           phone2?: string | null
           primary_color?: string | null
+          seo_home_description?: string | null
+          seo_home_keywords?: string | null
+          seo_home_title?: string | null
+          services?: Json | null
+          services_eyebrow?: string | null
+          services_subtitle?: string | null
+          services_title?: string | null
           stat1_label?: string | null
           stat1_value?: string | null
           stat2_label?: string | null
           stat2_value?: string | null
           stat3_label?: string | null
           stat3_value?: string | null
+          testimonials?: Json | null
+          testimonials_eyebrow?: string | null
+          testimonials_title?: string | null
           updated_at?: string
           viber_number?: string | null
           whatsapp_number?: string | null
+          why_eyebrow?: string | null
+          why_reasons?: Json | null
+          why_title?: string | null
         }
         Relationships: []
       }
