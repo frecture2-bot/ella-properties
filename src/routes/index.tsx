@@ -850,15 +850,19 @@ function SocialLink({ href, label, children }: { href: string; label: string; ch
 
 /* ---------------- Floating contacts ---------------- */
 
-function FloatingContacts() {
+function FloatingContacts({ settings }: { settings: PublicSettings }) {
   return (
     <div className="fixed bottom-5 right-5 z-40 flex flex-col gap-3">
-      <FloatBtn href={WHATSAPP} label="WhatsApp" className="bg-[#25D366] hover:brightness-110">
+      {settings.whatsapp_number && (
+      <FloatBtn href={waHref(settings.whatsapp_number)} label="WhatsApp" className="bg-[#25D366] hover:brightness-110">
         <MessageCircle className="h-6 w-6" />
       </FloatBtn>
-      <FloatBtn href={VIBER} label="Viber" className="bg-[#7360F2] hover:brightness-110">
+      )}
+      {settings.viber_number && (
+      <FloatBtn href={viberHref(settings.viber_number)} label="Viber" className="bg-[#7360F2] hover:brightness-110">
         <Phone className="h-5 w-5" />
       </FloatBtn>
+      )}
     </div>
   );
 }
