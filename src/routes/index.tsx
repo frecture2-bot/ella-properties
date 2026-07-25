@@ -172,7 +172,19 @@ function Header({ settings }: { settings: PublicSettings }) {
 function Logo({ settings }: { settings: PublicSettings }) {
   if (settings.logo_url) {
     return (
-      <img src={settings.logo_url} alt={settings.brand_name} className="h-10 w-auto" />
+      <span className="flex items-center gap-2">
+        <img src={settings.logo_url} alt={settings.brand_name} className="h-10 w-auto object-contain" />
+        <span className="flex flex-col leading-none">
+          <span className="font-display text-lg font-semibold tracking-wide text-navy">
+            {settings.brand_name}
+          </span>
+          {settings.brand_tagline ? (
+            <span className="text-[10px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
+              {settings.brand_tagline}
+            </span>
+          ) : null}
+        </span>
+      </span>
     );
   }
   const letter = (settings.brand_name || "Е").trim().charAt(0);
