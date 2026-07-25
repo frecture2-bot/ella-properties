@@ -173,7 +173,7 @@ function Logo({ settings }: { settings: PublicSettings }) {
   if (settings.logo_url) {
     return (
       <span className="flex items-center gap-2">
-        <img src={settings.logo_url} alt={settings.brand_name} className="h-10 w-auto object-contain" />
+        <img src={settings.logo_url} alt={settings.brand_name} className="h-14 w-auto object-contain" />
         <span className="flex flex-col leading-none">
           <span className="font-display text-lg font-semibold tracking-wide text-navy">
             {settings.brand_name}
@@ -190,8 +190,8 @@ function Logo({ settings }: { settings: PublicSettings }) {
   const letter = (settings.brand_name || "Е").trim().charAt(0);
   return (
     <span className="flex items-center gap-2">
-      <span className="grid h-10 w-10 place-items-center rounded-full bg-navy text-gold ring-1 ring-gold/40">
-        <span className="font-display text-xl font-semibold leading-none">{letter}</span>
+      <span className="grid h-14 w-14 place-items-center rounded-full bg-navy text-gold ring-1 ring-gold/40">
+        <span className="font-display text-2xl font-semibold leading-none">{letter}</span>
       </span>
       <span className="flex flex-col leading-none">
         <span className="font-display text-lg font-semibold tracking-wide text-navy">
