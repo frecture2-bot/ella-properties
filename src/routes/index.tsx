@@ -170,25 +170,30 @@ function Header({ settings }: { settings: PublicSettings }) {
 }
 
 function Logo({ settings }: { settings: PublicSettings }) {
+  const name = settings.brand_name || "Елла Недвижими Имоти";
+  const first = name.split(" ")[0];
+  const rest = name.split(" ").slice(1).join(" ");
+  const NameText = (
+    <span className="font-display text-[1.65rem] font-semibold leading-[1.05] tracking-tight text-navy">
+      <span className="text-gold">{first}</span>
+      {rest && <span className="ml-1.5">{rest}</span>}
+    </span>
+  );
   if (settings.logo_url) {
     return (
-      <span className="flex items-center gap-2">
-        <img src={settings.logo_url} alt={settings.brand_name} className="h-16 w-auto rounded-md object-cover" />
-        <span className="font-display text-lg font-semibold tracking-wide text-navy leading-none">
-          {settings.brand_name}
-        </span>
+      <span className="flex items-center gap-3">
+        <img src={settings.logo_url} alt={name} className="h-16 w-auto rounded-md object-cover" />
+        {NameText}
       </span>
     );
   }
-  const letter = (settings.brand_name || "Е").trim().charAt(0);
+  const letter = name.trim().charAt(0);
   return (
-    <span className="flex items-center gap-2">
-      <span className="grid h-16 w-16 place-items-center rounded-full bg-navy text-gold ring-1 ring-gold/40">
+    <span className="flex items-center gap-3">
+      <span className="grid h-16 w-16 place-items-center rounded-full bg-navy text-gold ring-2 ring-gold/40 shadow-sm">
         <span className="font-display text-3xl font-semibold leading-none">{letter}</span>
       </span>
-      <span className="font-display text-lg font-semibold tracking-wide text-navy leading-none">
-        {settings.brand_name}
-      </span>
+      {NameText}
     </span>
   );
 }
