@@ -790,12 +790,15 @@ function Footer({ settings }: { settings: PublicSettings }) {
     <footer className="border-t border-border bg-navy-deep text-white/80">
       <div className="mx-auto grid max-w-7xl gap-10 px-5 py-14 sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="grid h-10 w-10 place-items-center rounded-full bg-gold text-navy-deep ring-1 ring-gold/30">
-              <span className="font-display text-xl font-semibold">{(settings.brand_name || "Е").charAt(0)}</span>
+          <div className="flex items-center gap-3">
+            <span className="grid h-12 w-12 place-items-center rounded-full bg-gold text-navy-deep ring-2 ring-gold/40 shadow-sm">
+              <span className="font-display text-2xl font-semibold">{(settings.brand_name || "Е").charAt(0)}</span>
             </span>
             <div>
-              <div className="font-display text-lg text-white">{settings.brand_name}</div>
+              <div className="font-display text-[1.35rem] font-semibold leading-[1.05] tracking-tight text-white">
+                <span className="text-gold">{(settings.brand_name || "Елла").split(" ")[0]}</span>
+                <span className="ml-1.5">{(settings.brand_name || "Елла Недвижими Имоти").split(" ").slice(1).join(" ")}</span>
+              </div>
             </div>
           </div>
           <p className="mt-5 text-sm leading-relaxed text-white/65">
