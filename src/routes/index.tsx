@@ -174,15 +174,8 @@ function Logo({ settings }: { settings: PublicSettings }) {
     return (
       <span className="flex items-center gap-2">
         <img src={settings.logo_url} alt={settings.brand_name} className="h-16 w-auto rounded-md object-cover" />
-        <span className="flex flex-col leading-none">
-          <span className="font-display text-lg font-semibold tracking-wide text-navy">
-            {settings.brand_name}
-          </span>
-          {settings.brand_tagline ? (
-            <span className="text-[10px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
-              {settings.brand_tagline}
-            </span>
-          ) : null}
+        <span className="font-display text-lg font-semibold tracking-wide text-navy leading-none">
+          {settings.brand_name}
         </span>
       </span>
     );
@@ -193,13 +186,8 @@ function Logo({ settings }: { settings: PublicSettings }) {
       <span className="grid h-16 w-16 place-items-center rounded-full bg-navy text-gold ring-1 ring-gold/40">
         <span className="font-display text-3xl font-semibold leading-none">{letter}</span>
       </span>
-      <span className="flex flex-col leading-none">
-        <span className="font-display text-lg font-semibold tracking-wide text-navy">
-          {settings.brand_name}
-        </span>
-        <span className="text-[10px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
-          {settings.brand_tagline}
-        </span>
+      <span className="font-display text-lg font-semibold tracking-wide text-navy leading-none">
+        {settings.brand_name}
       </span>
     </span>
   );
@@ -803,9 +791,6 @@ function Footer({ settings }: { settings: PublicSettings }) {
             </span>
             <div>
               <div className="font-display text-lg text-white">{settings.brand_name}</div>
-              <div className="text-[10px] uppercase tracking-[0.22em] text-white/60">
-                {settings.brand_tagline}
-              </div>
             </div>
           </div>
           <p className="mt-5 text-sm leading-relaxed text-white/65">
