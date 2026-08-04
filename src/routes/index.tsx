@@ -175,7 +175,7 @@ function Logo({ settings }: { settings: PublicSettings }) {
   const rest = name.split(" ").slice(1).join(" ");
   const NameText = (
     <span className="font-display text-[1.65rem] font-semibold leading-[1.05] tracking-tight text-navy">
-      <span className="text-gold">{first}</span>
+      <span className="text-blue-600">{first}</span>
       {rest && <span className="ml-1.5">{rest}</span>}
     </span>
   );
@@ -796,7 +796,7 @@ function Footer({ settings }: { settings: PublicSettings }) {
             </span>
             <div>
               <div className="font-display text-[1.35rem] font-semibold leading-[1.05] tracking-tight text-white">
-                <span className="text-gold">{(settings.brand_name || "Елла").split(" ")[0]}</span>
+                <span className="text-blue-400">{(settings.brand_name || "Елла").split(" ")[0]}</span>
                 <span className="ml-1.5">{(settings.brand_name || "Елла Недвижими Имоти").split(" ").slice(1).join(" ")}</span>
               </div>
             </div>
