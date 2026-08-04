@@ -111,33 +111,40 @@ function Header({ settings }: { settings: PublicSettings }) {
   const nav = settings.nav_links ?? [];
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
-        <a href="#top" className="flex items-center gap-2">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3 lg:px-8">
+        <a href="#top" className="flex min-w-0 shrink items-center gap-2">
           <Logo settings={settings} />
         </a>
-        <nav className="hidden items-center gap-8 lg:flex">
+        <nav className="hidden shrink-0 items-center gap-5 lg:flex xl:gap-8">
           {nav.map((n) => (
             <a
               key={n.href}
               href={n.href}
-              className="text-sm font-medium text-foreground/75 transition-colors hover:text-gold"
+              className="whitespace-nowrap text-sm font-medium text-foreground/75 transition-colors hover:text-gold"
             >
               {n.label}
             </a>
           ))}
         </nav>
-        <div className="hidden lg:flex">
-          <Button asChild variant="default" className="bg-navy text-white hover:bg-navy-deep">
+        <div className="hidden shrink-0 xl:flex">
+          <Button asChild variant="default" className="whitespace-nowrap bg-navy text-white hover:bg-navy-deep">
             <a href={telHref(settings.phone1)}>
               <Phone className="mr-2 h-4 w-4" />
               {settings.phone1}
             </a>
           </Button>
         </div>
+        <a
+          href={telHref(settings.phone1)}
+          aria-label={settings.phone1}
+          className="hidden shrink-0 rounded-full bg-navy p-2.5 text-white transition-colors hover:bg-navy-deep lg:inline-flex xl:hidden"
+        >
+          <Phone className="h-4 w-4" />
+        </a>
         <button
           aria-label="Меню"
           onClick={() => setOpen((o) => !o)}
-          className="rounded-md border border-border p-2 lg:hidden"
+          className="shrink-0 rounded-md border border-border p-2 lg:hidden"
         >
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
@@ -174,24 +181,28 @@ function Logo({ settings }: { settings: PublicSettings }) {
   const first = name.split(" ")[0];
   const rest = name.split(" ").slice(1).join(" ");
   const NameText = (
-    <span className="font-display text-[1.65rem] font-semibold leading-[1.05] tracking-tight text-navy">
+    <span className="min-w-0 truncate font-display text-xl font-semibold leading-none tracking-tight text-navy sm:text-2xl lg:text-[1.45rem] xl:text-[1.65rem]">
       <span className="text-blue-600">{first}</span>
       {rest && <span className="ml-1.5">{rest}</span>}
     </span>
   );
   if (settings.logo_url) {
     return (
-      <span className="flex items-center gap-3">
-        <img src={settings.logo_url} alt={name} className="h-16 w-auto rounded-md object-cover" />
+      <span className="flex min-w-0 items-center gap-3">
+        <img
+          src={settings.logo_url}
+          alt={name}
+          className="h-12 w-auto shrink-0 rounded-md object-cover lg:h-14"
+        />
         {NameText}
       </span>
     );
   }
   const letter = name.trim().charAt(0);
   return (
-    <span className="flex items-center gap-3">
-      <span className="grid h-16 w-16 place-items-center rounded-full bg-navy text-gold ring-2 ring-gold/40 shadow-sm">
-        <span className="font-display text-3xl font-semibold leading-none">{letter}</span>
+    <span className="flex min-w-0 items-center gap-3">
+      <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-navy text-gold ring-2 ring-gold/40 shadow-sm lg:h-14 lg:w-14">
+        <span className="font-display text-2xl font-semibold leading-none lg:text-3xl">{letter}</span>
       </span>
       {NameText}
     </span>
