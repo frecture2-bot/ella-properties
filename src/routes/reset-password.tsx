@@ -8,7 +8,22 @@ import { Label } from "@/components/ui/label";
 import { Toaster } from "@/components/ui/sonner";
 
 export const Route = createFileRoute("/reset-password")({
-  head: () => ({ meta: [{ title: "Нова парола" }] }),
+  head: () => ({
+    meta: [
+      { title: "Нова парола — Елла Недвижими Имоти" },
+      {
+        name: "description",
+        content:
+          "Задайте нова парола за достъп до административния панел на Елла Недвижими Имоти.",
+      },
+      { property: "og:title", content: "Нова парола — Елла Недвижими Имоти" },
+      {
+        property: "og:description",
+        content: "Задайте нова парола за административния панел на Елла Недвижими Имоти.",
+      },
+      { name: "robots", content: "noindex" },
+    ],
+  }),
   component: ResetPage,
 });
 
@@ -42,8 +57,9 @@ function ResetPage() {
           <h1 className="font-display text-2xl">Задайте нова парола</h1>
           <form onSubmit={onSubmit} className="mt-6 space-y-4">
             <div>
-              <Label className="text-white/80">Нова парола</Label>
+              <Label htmlFor="new-password" className="text-white/80">Нова парола</Label>
               <Input
+                id="new-password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
