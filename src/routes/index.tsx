@@ -225,27 +225,27 @@ function Hero({ settings }: { settings: PublicSettings }) {
           alt="Луксозен апартамент"
           width={1920}
           height={1280}
-          className="h-[78vh] min-h-[560px] w-full object-cover"
+          className="h-[88svh] max-h-[860px] min-h-[520px] w-full object-cover sm:h-[78vh] sm:min-h-[560px]"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-navy-deep/85 via-navy-deep/55 to-navy-deep/85" />
         <div className="absolute inset-0 flex items-center">
           <div className="mx-auto w-full max-w-7xl px-4 sm:px-5 lg:px-8">
             <div className="max-w-2xl">
-              <span className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-white/5 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.2em] text-gold backdrop-blur">
+              <span className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-white/5 px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.18em] text-gold backdrop-blur sm:px-4 sm:text-xs sm:tracking-[0.2em]">
                 <span className="h-1.5 w-1.5 rounded-full bg-gold" />
                 {settings.hero_eyebrow}
               </span>
-              <h1 className="mt-6 font-display text-4xl font-medium leading-[1.05] text-white sm:text-5xl lg:text-6xl">
+              <h1 className="mt-5 font-display text-[2rem] font-medium leading-[1.08] text-white sm:mt-6 sm:text-5xl lg:text-6xl">
                 {settings.hero_title}
               </h1>
-              <p className="mt-6 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg">
+              <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-white/80 sm:mt-6 sm:text-lg">
                 {settings.hero_subtitle}
               </p>
-              <div className="mt-9 flex flex-wrap gap-3">
+              <div className="mt-7 flex flex-col gap-3 sm:mt-9 sm:flex-row sm:flex-wrap">
                 <Button
                   asChild
                   size="lg"
-                  className="h-12 rounded-full bg-gold px-7 text-navy-deep hover:bg-gold-soft"
+                  className="h-12 w-full rounded-full bg-gold px-7 text-navy-deep hover:bg-gold-soft sm:w-auto"
                 >
                   <a href={settings.hero_cta_link || "#catalog"}>
                     {settings.hero_cta_label} <ArrowRight className="ml-2 h-4 w-4" />
@@ -255,18 +255,18 @@ function Hero({ settings }: { settings: PublicSettings }) {
                   asChild
                   size="lg"
                   variant="outline"
-                  className="h-12 rounded-full border-white/40 bg-white/5 px-7 text-white backdrop-blur hover:bg-white/10 hover:text-white"
+                  className="h-12 w-full rounded-full border-white/40 bg-white/5 px-7 text-white backdrop-blur hover:bg-white/10 hover:text-white sm:w-auto"
                 >
                   <a href={settings.hero_secondary_cta_link || "#contact"}>
                     {settings.hero_secondary_cta_label}
                   </a>
                 </Button>
               </div>
-              <dl className="mt-12 grid max-w-lg grid-cols-3 gap-6 border-t border-white/15 pt-8 text-white">
+              <dl className="mt-8 grid max-w-lg grid-cols-3 gap-4 border-t border-white/15 pt-6 text-white sm:mt-12 sm:gap-6 sm:pt-8">
                 {stats.map((s) => (
                   <div key={s.v}>
-                    <dt className="font-display text-3xl text-gold">{s.k}</dt>
-                    <dd className="mt-1 text-xs uppercase tracking-[0.15em] text-white/65">
+                    <dt className="font-display text-2xl text-gold sm:text-3xl">{s.k}</dt>
+                    <dd className="mt-1 text-[10px] uppercase leading-tight tracking-[0.12em] text-white/65 sm:text-xs sm:tracking-[0.15em]">
                       {s.v}
                     </dd>
                   </div>
