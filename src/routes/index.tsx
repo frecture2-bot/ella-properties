@@ -300,7 +300,7 @@ function About({ settings }: { settings: PublicSettings }) {
             </p>
           )}
         </div>
-        <div className="grid grid-cols-2 gap-5">
+        <div className="grid grid-cols-2 gap-4 sm:gap-5">
           {[
             { k: settings.stat1_value, v: settings.stat1_label },
             { k: settings.stat2_value, v: settings.stat2_label },
@@ -347,7 +347,7 @@ function Services({ settings }: { settings: PublicSettings }) {
             return (
             <div
               key={s.title}
-              className="group flex flex-col rounded-2xl border border-border bg-card p-7 transition-all hover:-translate-y-1 hover:border-gold hover:shadow-xl"
+              className="group flex flex-col rounded-2xl border border-border bg-card p-6 transition-all sm:p-7 hover:-translate-y-1 hover:border-gold hover:shadow-xl"
             >
               <div className="grid h-12 w-12 place-items-center rounded-xl bg-navy text-gold ring-1 ring-gold/30">
                 <Icon className="h-5 w-5" />
@@ -411,7 +411,7 @@ function Catalog({ settings }: { settings: PublicSettings }) {
           {settings.catalog_title}
         </h2>
 
-        <div className="mt-10 grid gap-4 rounded-2xl border border-border bg-card p-5 shadow-sm sm:grid-cols-2 lg:grid-cols-5">
+        <div className="mt-8 grid gap-4 rounded-2xl border border-border bg-card p-4 sm:mt-10 sm:p-5 shadow-sm sm:grid-cols-2 lg:grid-cols-5">
           <FilterSelect label="Вид имот" value={type} onChange={setType} options={PROPERTY_TYPES as string[]} />
           <FilterSelect label="Тип сделка" value={listing} onChange={setListing} options={["Всички", "Продажба", "Наем"]} />
           <FilterSelect label="Квартал" value={district} onChange={setDistrict} options={districts} />
@@ -437,13 +437,13 @@ function Catalog({ settings }: { settings: PublicSettings }) {
           </div>
         </div>
 
-        <div className="mt-10 grid gap-7 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid gap-5 sm:mt-10 sm:gap-7 md:grid-cols-2 lg:grid-cols-3">
           {filtered.map((p) => (
             <PropertyCard key={p.id} p={p} />
           ))}
         </div>
         {filtered.length === 0 && (
-          <div className="mt-10 rounded-2xl border border-dashed border-border p-12 text-center text-muted-foreground">
+          <div className="mt-10 rounded-2xl border border-dashed border-border p-8 text-center sm:p-12 text-muted-foreground">
             Няма намерени имоти по зададените критерии.
           </div>
         )}
@@ -592,7 +592,7 @@ function Testimonials({ settings }: { settings: PublicSettings }) {
           {items.map((t) => (
             <figure
               key={t.name}
-              className="flex flex-col rounded-2xl border border-border bg-card p-8 shadow-sm"
+              className="flex flex-col rounded-2xl border border-border bg-card p-6 shadow-sm sm:p-8"
             >
               <div className="flex gap-1 text-gold">
                 {Array.from({ length: 5 }).map((_, i) => (
@@ -868,7 +868,7 @@ function SocialLink({ href, label, children }: { href: string; label: string; ch
 
 function FloatingContacts({ settings }: { settings: PublicSettings }) {
   return (
-    <div className="fixed bottom-5 right-5 z-40 flex flex-col gap-3">
+    <div className="fixed bottom-4 right-4 z-40 sm:bottom-5 sm:right-5 flex flex-col gap-3">
       {settings.whatsapp_number && (
       <FloatBtn href={waHref(settings.whatsapp_number)} label="WhatsApp" className="bg-[#25D366] hover:brightness-110">
         <MessageCircle className="h-6 w-6" />
