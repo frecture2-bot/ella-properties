@@ -102,6 +102,37 @@ export const Route = createFileRoute("/")({
           url: "https://ellaimoti.lovable.app/",
         }),
       },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          name: "Топ оферти",
+          itemListElement: properties.map((p, i) => ({
+            "@type": "ListItem",
+            position: i + 1,
+            item: {
+              "@type": "RealEstateListing",
+              name: p.title,
+              description: p.description,
+              url: "https://ellaimoti.lovable.app/#catalog",
+              floorSize: { "@type": "QuantitativeValue", value: p.area, unitCode: "MTK" },
+              offers: {
+                "@type": "Offer",
+                price: p.price,
+                priceCurrency: "EUR",
+                availability: "https://schema.org/InStock",
+              },
+              address: {
+                "@type": "PostalAddress",
+                addressLocality: p.city,
+                addressRegion: p.district,
+                addressCountry: "BG",
+              },
+            },
+          })),
+        }),
+      },
     ],
   }),
   component: HomePage,
