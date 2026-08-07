@@ -12,7 +12,22 @@ import { Toaster } from "@/components/ui/sonner";
 import { useSiteSettings } from "@/hooks/use-site-settings";
 
 export const Route = createFileRoute("/auth")({
-  head: () => ({ meta: [{ title: "Вход — Елла Недвижими Имоти" }] }),
+  head: () => ({
+    meta: [
+      { title: "Вход — Елла Недвижими Имоти" },
+      {
+        name: "description",
+        content:
+          "Влезте в своя профил в Елла Недвижими Имоти, за да управлявате имотите и запитванията на агенцията.",
+      },
+      { property: "og:title", content: "Вход в административния панел — Елла Недвижими Имоти" },
+      {
+        property: "og:description",
+        content: "Достъп до административния панел на Елла Недвижими Имоти.",
+      },
+      { name: "robots", content: "noindex" },
+    ],
+  }),
   component: AuthPage,
 });
 

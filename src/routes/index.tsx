@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useId, useMemo, useState } from "react";
 import {
   Phone,
   MapPin,
@@ -61,18 +61,79 @@ const viberHref = (n?: string) =>
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Елла Недвижими Имоти — Агенция за имоти в област Перник и София" },
+      { title: "Елла Недвижими Имоти — Имоти в Перник и София" },
       {
         name: "description",
         content:
-          "Лицензирана агенция за недвижими имоти в област Перник и София. Професионално съдействие при покупка, продажба и отдаване под наем на апартаменти, къщи, парцели и бизнес имоти.",
+          "Агенция за недвижими имоти в област Перник и София — покупка, продажба и наем на апартаменти, къщи, парцели и бизнес имоти.",
       },
       { name: "keywords", content: "Недвижими имоти Перник, недвижими имоти София, апартаменти Перник, къщи Перник, имоти област Перник, агенция недвижими имоти Перник и София" },
-      { property: "og:title", content: "Елла Недвижими Имоти — Агенция за имоти в област Перник и София" },
+      { property: "og:title", content: "Елла Недвижими Имоти — Имоти в Перник и София" },
       { property: "og:description", content: "Професионално съдействие при покупка, продажба и отдаване под наем на имоти в област Перник и София." },
       { property: "og:url", content: "/" },
     ],
     links: [{ rel: "canonical", href: "/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "RealEstateAgent",
+          name: "Елла Недвижими Имоти",
+          url: "https://ellaimoti.lovable.app/",
+          telephone: ["+359884816232", "+359884388022"],
+          email: "office@ella-imoti.bg",
+          areaServed: ["Перник", "София"],
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: "ул. „Райко Даскалов“ 4",
+            addressLocality: "Перник",
+            postalCode: "2300",
+            addressCountry: "BG",
+          },
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "Елла Недвижими Имоти",
+          url: "https://ellaimoti.lovable.app/",
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          name: "Топ оферти",
+          itemListElement: properties.map((p, i) => ({
+            "@type": "ListItem",
+            position: i + 1,
+            item: {
+              "@type": "RealEstateListing",
+              name: p.title,
+              description: p.description,
+              url: "https://ellaimoti.lovable.app/#catalog",
+              floorSize: { "@type": "QuantitativeValue", value: p.area, unitCode: "MTK" },
+              offers: {
+                "@type": "Offer",
+                price: p.price,
+                priceCurrency: "EUR",
+                availability: "https://schema.org/InStock",
+              },
+              address: {
+                "@type": "PostalAddress",
+                addressLocality: p.city,
+                addressRegion: p.district,
+                addressCountry: "BG",
+              },
+            },
+          })),
+        }),
+      },
+    ],
   }),
   component: HomePage,
 });
@@ -416,8 +477,9 @@ function Catalog({ settings }: { settings: PublicSettings }) {
           <FilterSelect label="Тип сделка" value={listing} onChange={setListing} options={["Всички", "Продажба", "Наем"]} />
           <FilterSelect label="Квартал" value={district} onChange={setDistrict} options={districts} />
           <div className="flex flex-col gap-1.5">
-            <Label className="text-xs uppercase tracking-wider text-muted-foreground">Цена до (€)</Label>
+            <Label htmlFor="filter-max-price" className="text-xs uppercase tracking-wider text-muted-foreground">Цена до (€)</Label>
             <Input
+              id="filter-max-price"
               type="number"
               inputMode="numeric"
               placeholder="напр. 100000"
@@ -426,8 +488,9 @@ function Catalog({ settings }: { settings: PublicSettings }) {
             />
           </div>
           <div className="flex flex-col gap-1.5">
-            <Label className="text-xs uppercase tracking-wider text-muted-foreground">Квадратура от (м²)</Label>
+            <Label htmlFor="filter-min-area" className="text-xs uppercase tracking-wider text-muted-foreground">Квадратура от (м²)</Label>
             <Input
+              id="filter-min-area"
               type="number"
               inputMode="numeric"
               placeholder="напр. 60"
@@ -463,11 +526,12 @@ function FilterSelect({
   onChange: (v: string) => void;
   options: string[];
 }) {
+  const id = useId();
   return (
     <div className="flex flex-col gap-1.5">
-      <Label className="text-xs uppercase tracking-wider text-muted-foreground">{label}</Label>
+      <Label htmlFor={id} className="text-xs uppercase tracking-wider text-muted-foreground">{label}</Label>
       <Select value={value} onValueChange={onChange}>
-        <SelectTrigger>
+        <SelectTrigger id={id} aria-label={label}>
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
@@ -703,10 +767,11 @@ function Contact({ settings }: { settings: PublicSettings }) {
                 <Field label="Имейл" value={form.email} onChange={(v) => update("email", v)} type="email" />
               </div>
               <div className="sm:col-span-2 flex flex-col gap-1.5">
-                <Label className="text-xs uppercase tracking-wider text-muted-foreground">
+                <Label htmlFor="contact-message" className="text-xs uppercase tracking-wider text-muted-foreground">
                   Съобщение *
                 </Label>
                 <Textarea
+                  id="contact-message"
                   value={form.message}
                   onChange={(e) => update("message", e.target.value)}
                   rows={5}
@@ -741,10 +806,12 @@ function Field({
   onChange: (v: string) => void;
   type?: string;
 }) {
+  const id = useId();
   return (
     <div className="flex flex-col gap-1.5">
-      <Label className="text-xs uppercase tracking-wider text-muted-foreground">{label}</Label>
+      <Label htmlFor={id} className="text-xs uppercase tracking-wider text-muted-foreground">{label}</Label>
       <Input
+        id={id}
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
