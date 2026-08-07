@@ -341,7 +341,7 @@ function Services({ settings }: { settings: PublicSettings }) {
             {settings.services_subtitle}
           </p>
         </div>
-        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-8 grid gap-5 sm:mt-12 sm:grid-cols-2 lg:grid-cols-4">
           {services.map((s) => {
             const Icon = iconOf(s.icon);
             return (
@@ -557,7 +557,7 @@ function WhyUs({ settings }: { settings: PublicSettings }) {
         <h2 className="mt-4 max-w-3xl font-display text-3xl font-medium sm:text-4xl md:text-5xl">
           {settings.why_title}
         </h2>
-        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid gap-4 sm:mt-12 sm:grid-cols-2 lg:grid-cols-3">
           {reasons.map((r, i) => (
             <div
               key={r}
@@ -588,7 +588,7 @@ function Testimonials({ settings }: { settings: PublicSettings }) {
             {settings.testimonials_title}
           </h2>
         </div>
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
+        <div className="mt-8 grid gap-5 sm:mt-12 sm:gap-6 md:grid-cols-3">
           {items.map((t) => (
             <figure
               key={t.name}
@@ -655,7 +655,7 @@ function Contact({ settings }: { settings: PublicSettings }) {
           <p className="mt-4 text-muted-foreground">{settings.contact_subtitle}</p>
         </div>
 
-        <div className="mt-12 grid gap-8 lg:grid-cols-5">
+        <div className="mt-8 grid gap-6 sm:mt-12 sm:gap-8 lg:grid-cols-5">
           <div className="space-y-5 lg:col-span-2">
             <ContactRow
               icon={Phone}
