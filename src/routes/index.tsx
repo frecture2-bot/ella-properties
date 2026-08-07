@@ -229,7 +229,7 @@ function Hero({ settings }: { settings: PublicSettings }) {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-navy-deep/85 via-navy-deep/55 to-navy-deep/85" />
         <div className="absolute inset-0 flex items-center">
-          <div className="mx-auto w-full max-w-7xl px-5 lg:px-8">
+          <div className="mx-auto w-full max-w-7xl px-4 sm:px-5 lg:px-8">
             <div className="max-w-2xl">
               <span className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-white/5 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.2em] text-gold backdrop-blur">
                 <span className="h-1.5 w-1.5 rounded-full bg-gold" />
@@ -284,11 +284,11 @@ function Hero({ settings }: { settings: PublicSettings }) {
 
 function About({ settings }: { settings: PublicSettings }) {
   return (
-    <section id="about" className="bg-background py-24 lg:py-32">
+    <section id="about" className="bg-background py-16 sm:py-20 lg:py-32">
       <div className="mx-auto grid max-w-7xl gap-14 px-5 lg:grid-cols-2 lg:gap-20 lg:px-8">
         <div>
           <SectionEyebrow>За нас</SectionEyebrow>
-          <h2 className="mt-4 font-display text-4xl font-medium text-navy sm:text-5xl">
+          <h2 className="mt-4 font-display text-3xl font-medium text-navy sm:text-4xl md:text-5xl">
             {settings.about_title}
           </h2>
           <p className="mt-6 whitespace-pre-line text-lg leading-relaxed text-foreground/75">
@@ -328,12 +328,12 @@ function About({ settings }: { settings: PublicSettings }) {
 function Services({ settings }: { settings: PublicSettings }) {
   const services = settings.services ?? [];
   return (
-    <section id="services" className="bg-muted/50 py-24 lg:py-32">
-      <div className="mx-auto max-w-7xl px-5 lg:px-8">
+    <section id="services" className="bg-muted/50 py-16 sm:py-20 lg:py-32">
+      <div className="mx-auto max-w-7xl px-4 sm:px-5 lg:px-8">
         <div className="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-end">
           <div className="max-w-2xl">
             <SectionEyebrow>{settings.services_eyebrow}</SectionEyebrow>
-            <h2 className="mt-4 font-display text-4xl font-medium text-navy sm:text-5xl">
+            <h2 className="mt-4 font-display text-3xl font-medium text-navy sm:text-4xl md:text-5xl">
               {settings.services_title}
             </h2>
           </div>
@@ -404,10 +404,10 @@ function Catalog({ settings }: { settings: PublicSettings }) {
   }, [type, listing, district, maxPrice, minArea]);
 
   return (
-    <section id="catalog" className="bg-background py-24 lg:py-32">
-      <div className="mx-auto max-w-7xl px-5 lg:px-8">
+    <section id="catalog" className="bg-background py-16 sm:py-20 lg:py-32">
+      <div className="mx-auto max-w-7xl px-4 sm:px-5 lg:px-8">
         <SectionEyebrow>{settings.catalog_eyebrow}</SectionEyebrow>
-        <h2 className="mt-4 font-display text-4xl font-medium text-navy sm:text-5xl">
+        <h2 className="mt-4 font-display text-3xl font-medium text-navy sm:text-4xl md:text-5xl">
           {settings.catalog_title}
         </h2>
 
@@ -552,9 +552,9 @@ function WhyUs({ settings }: { settings: PublicSettings }) {
         backgroundImage: "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.6) 1px, transparent 0)",
         backgroundSize: "32px 32px",
       }} />
-      <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-5 lg:px-8">
         <SectionEyebrow tone="gold">{settings.why_eyebrow}</SectionEyebrow>
-        <h2 className="mt-4 max-w-3xl font-display text-4xl font-medium sm:text-5xl">
+        <h2 className="mt-4 max-w-3xl font-display text-3xl font-medium sm:text-4xl md:text-5xl">
           {settings.why_title}
         </h2>
         <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -580,11 +580,11 @@ function WhyUs({ settings }: { settings: PublicSettings }) {
 function Testimonials({ settings }: { settings: PublicSettings }) {
   const items = settings.testimonials ?? [];
   return (
-    <section id="testimonials" className="bg-background py-24 lg:py-32">
-      <div className="mx-auto max-w-7xl px-5 lg:px-8">
+    <section id="testimonials" className="bg-background py-16 sm:py-20 lg:py-32">
+      <div className="mx-auto max-w-7xl px-4 sm:px-5 lg:px-8">
         <div className="max-w-2xl">
           <SectionEyebrow>{settings.testimonials_eyebrow}</SectionEyebrow>
-          <h2 className="mt-4 font-display text-4xl font-medium text-navy sm:text-5xl">
+          <h2 className="mt-4 font-display text-3xl font-medium text-navy sm:text-4xl md:text-5xl">
             {settings.testimonials_title}
           </h2>
         </div>
@@ -647,11 +647,11 @@ function Contact({ settings }: { settings: PublicSettings }) {
   }
 
   return (
-    <section id="contact" className="bg-muted/50 py-24 lg:py-32">
-      <div className="mx-auto max-w-7xl px-5 lg:px-8">
+    <section id="contact" className="bg-muted/50 py-16 sm:py-20 lg:py-32">
+      <div className="mx-auto max-w-7xl px-4 sm:px-5 lg:px-8">
         <div className="max-w-2xl">
           <SectionEyebrow>{settings.contact_eyebrow}</SectionEyebrow>
-          <h2 className="mt-4 font-display text-4xl font-medium text-navy sm:text-5xl">{settings.contact_title}</h2>
+          <h2 className="mt-4 font-display text-3xl font-medium text-navy sm:text-4xl md:text-5xl">{settings.contact_title}</h2>
           <p className="mt-4 text-muted-foreground">{settings.contact_subtitle}</p>
         </div>
 
