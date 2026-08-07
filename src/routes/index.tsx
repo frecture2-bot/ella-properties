@@ -111,7 +111,7 @@ function Header({ settings }: { settings: PublicSettings }) {
   const nav = settings.nav_links ?? [];
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3 lg:px-8">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-5 lg:px-8">
         <a href="#top" className="flex min-w-0 shrink items-center gap-2">
           <Logo settings={settings} />
         </a>
@@ -151,7 +151,7 @@ function Header({ settings }: { settings: PublicSettings }) {
       </div>
       {open && (
         <div className="border-t border-border/60 bg-background lg:hidden">
-          <nav className="mx-auto flex max-w-7xl flex-col gap-1 px-5 py-3">
+          <nav className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-3 sm:px-5">
             {nav.map((n) => (
               <a
                 key={n.href}
@@ -225,27 +225,27 @@ function Hero({ settings }: { settings: PublicSettings }) {
           alt="Луксозен апартамент"
           width={1920}
           height={1280}
-          className="h-[78vh] min-h-[560px] w-full object-cover"
+          className="h-[88svh] max-h-[860px] min-h-[520px] w-full object-cover sm:h-[78vh] sm:min-h-[560px]"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-navy-deep/85 via-navy-deep/55 to-navy-deep/85" />
         <div className="absolute inset-0 flex items-center">
-          <div className="mx-auto w-full max-w-7xl px-5 lg:px-8">
+          <div className="mx-auto w-full max-w-7xl px-4 sm:px-5 lg:px-8">
             <div className="max-w-2xl">
-              <span className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-white/5 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.2em] text-gold backdrop-blur">
+              <span className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-white/5 px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.18em] text-gold backdrop-blur sm:px-4 sm:text-xs sm:tracking-[0.2em]">
                 <span className="h-1.5 w-1.5 rounded-full bg-gold" />
                 {settings.hero_eyebrow}
               </span>
-              <h1 className="mt-6 font-display text-4xl font-medium leading-[1.05] text-white sm:text-5xl lg:text-6xl">
+              <h1 className="mt-5 font-display text-[2rem] font-medium leading-[1.08] text-white sm:mt-6 sm:text-5xl lg:text-6xl">
                 {settings.hero_title}
               </h1>
-              <p className="mt-6 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg">
+              <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-white/80 sm:mt-6 sm:text-lg">
                 {settings.hero_subtitle}
               </p>
-              <div className="mt-9 flex flex-wrap gap-3">
+              <div className="mt-7 flex flex-col gap-3 sm:mt-9 sm:flex-row sm:flex-wrap">
                 <Button
                   asChild
                   size="lg"
-                  className="h-12 rounded-full bg-gold px-7 text-navy-deep hover:bg-gold-soft"
+                  className="h-12 w-full rounded-full bg-gold px-7 text-navy-deep hover:bg-gold-soft sm:w-auto"
                 >
                   <a href={settings.hero_cta_link || "#catalog"}>
                     {settings.hero_cta_label} <ArrowRight className="ml-2 h-4 w-4" />
@@ -255,18 +255,18 @@ function Hero({ settings }: { settings: PublicSettings }) {
                   asChild
                   size="lg"
                   variant="outline"
-                  className="h-12 rounded-full border-white/40 bg-white/5 px-7 text-white backdrop-blur hover:bg-white/10 hover:text-white"
+                  className="h-12 w-full rounded-full border-white/40 bg-white/5 px-7 text-white backdrop-blur hover:bg-white/10 hover:text-white sm:w-auto"
                 >
                   <a href={settings.hero_secondary_cta_link || "#contact"}>
                     {settings.hero_secondary_cta_label}
                   </a>
                 </Button>
               </div>
-              <dl className="mt-12 grid max-w-lg grid-cols-3 gap-6 border-t border-white/15 pt-8 text-white">
+              <dl className="mt-8 grid max-w-lg grid-cols-3 gap-4 border-t border-white/15 pt-6 text-white sm:mt-12 sm:gap-6 sm:pt-8">
                 {stats.map((s) => (
                   <div key={s.v}>
-                    <dt className="font-display text-3xl text-gold">{s.k}</dt>
-                    <dd className="mt-1 text-xs uppercase tracking-[0.15em] text-white/65">
+                    <dt className="font-display text-2xl text-gold sm:text-3xl">{s.k}</dt>
+                    <dd className="mt-1 text-[10px] uppercase leading-tight tracking-[0.12em] text-white/65 sm:text-xs sm:tracking-[0.15em]">
                       {s.v}
                     </dd>
                   </div>
@@ -284,11 +284,11 @@ function Hero({ settings }: { settings: PublicSettings }) {
 
 function About({ settings }: { settings: PublicSettings }) {
   return (
-    <section id="about" className="bg-background py-24 lg:py-32">
-      <div className="mx-auto grid max-w-7xl gap-14 px-5 lg:grid-cols-2 lg:gap-20 lg:px-8">
+    <section id="about" className="bg-background py-16 sm:py-20 lg:py-32">
+      <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:gap-14 sm:px-5 lg:grid-cols-2 lg:gap-20 lg:px-8">
         <div>
           <SectionEyebrow>За нас</SectionEyebrow>
-          <h2 className="mt-4 font-display text-4xl font-medium text-navy sm:text-5xl">
+          <h2 className="mt-4 font-display text-3xl font-medium text-navy sm:text-4xl md:text-5xl">
             {settings.about_title}
           </h2>
           <p className="mt-6 whitespace-pre-line text-lg leading-relaxed text-foreground/75">
@@ -300,7 +300,7 @@ function About({ settings }: { settings: PublicSettings }) {
             </p>
           )}
         </div>
-        <div className="grid grid-cols-2 gap-5">
+        <div className="grid grid-cols-2 gap-4 sm:gap-5">
           {[
             { k: settings.stat1_value, v: settings.stat1_label },
             { k: settings.stat2_value, v: settings.stat2_label },
@@ -328,12 +328,12 @@ function About({ settings }: { settings: PublicSettings }) {
 function Services({ settings }: { settings: PublicSettings }) {
   const services = settings.services ?? [];
   return (
-    <section id="services" className="bg-muted/50 py-24 lg:py-32">
-      <div className="mx-auto max-w-7xl px-5 lg:px-8">
+    <section id="services" className="bg-muted/50 py-16 sm:py-20 lg:py-32">
+      <div className="mx-auto max-w-7xl px-4 sm:px-5 lg:px-8">
         <div className="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-end">
           <div className="max-w-2xl">
             <SectionEyebrow>{settings.services_eyebrow}</SectionEyebrow>
-            <h2 className="mt-4 font-display text-4xl font-medium text-navy sm:text-5xl">
+            <h2 className="mt-4 font-display text-3xl font-medium text-navy sm:text-4xl md:text-5xl">
               {settings.services_title}
             </h2>
           </div>
@@ -341,13 +341,13 @@ function Services({ settings }: { settings: PublicSettings }) {
             {settings.services_subtitle}
           </p>
         </div>
-        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-8 grid gap-5 sm:mt-12 sm:grid-cols-2 lg:grid-cols-4">
           {services.map((s) => {
             const Icon = iconOf(s.icon);
             return (
             <div
               key={s.title}
-              className="group flex flex-col rounded-2xl border border-border bg-card p-7 transition-all hover:-translate-y-1 hover:border-gold hover:shadow-xl"
+              className="group flex flex-col rounded-2xl border border-border bg-card p-6 transition-all sm:p-7 hover:-translate-y-1 hover:border-gold hover:shadow-xl"
             >
               <div className="grid h-12 w-12 place-items-center rounded-xl bg-navy text-gold ring-1 ring-gold/30">
                 <Icon className="h-5 w-5" />
@@ -404,14 +404,14 @@ function Catalog({ settings }: { settings: PublicSettings }) {
   }, [type, listing, district, maxPrice, minArea]);
 
   return (
-    <section id="catalog" className="bg-background py-24 lg:py-32">
-      <div className="mx-auto max-w-7xl px-5 lg:px-8">
+    <section id="catalog" className="bg-background py-16 sm:py-20 lg:py-32">
+      <div className="mx-auto max-w-7xl px-4 sm:px-5 lg:px-8">
         <SectionEyebrow>{settings.catalog_eyebrow}</SectionEyebrow>
-        <h2 className="mt-4 font-display text-4xl font-medium text-navy sm:text-5xl">
+        <h2 className="mt-4 font-display text-3xl font-medium text-navy sm:text-4xl md:text-5xl">
           {settings.catalog_title}
         </h2>
 
-        <div className="mt-10 grid gap-4 rounded-2xl border border-border bg-card p-5 shadow-sm sm:grid-cols-2 lg:grid-cols-5">
+        <div className="mt-8 grid gap-4 rounded-2xl border border-border bg-card p-4 sm:mt-10 sm:p-5 shadow-sm sm:grid-cols-2 lg:grid-cols-5">
           <FilterSelect label="Вид имот" value={type} onChange={setType} options={PROPERTY_TYPES as string[]} />
           <FilterSelect label="Тип сделка" value={listing} onChange={setListing} options={["Всички", "Продажба", "Наем"]} />
           <FilterSelect label="Квартал" value={district} onChange={setDistrict} options={districts} />
@@ -437,13 +437,13 @@ function Catalog({ settings }: { settings: PublicSettings }) {
           </div>
         </div>
 
-        <div className="mt-10 grid gap-7 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid gap-5 sm:mt-10 sm:gap-7 md:grid-cols-2 lg:grid-cols-3">
           {filtered.map((p) => (
             <PropertyCard key={p.id} p={p} />
           ))}
         </div>
         {filtered.length === 0 && (
-          <div className="mt-10 rounded-2xl border border-dashed border-border p-12 text-center text-muted-foreground">
+          <div className="mt-10 rounded-2xl border border-dashed border-border p-8 text-center sm:p-12 text-muted-foreground">
             Няма намерени имоти по зададените критерии.
           </div>
         )}
@@ -547,17 +547,17 @@ function PropertyCard({ p }: { p: (typeof properties)[number] }) {
 function WhyUs({ settings }: { settings: PublicSettings }) {
   const reasons = settings.why_reasons ?? [];
   return (
-    <section id="why" className="relative overflow-hidden bg-navy-deep py-24 text-white lg:py-32">
+    <section id="why" className="relative overflow-hidden bg-navy-deep py-16 text-white sm:py-20 lg:py-32">
       <div className="absolute inset-0 opacity-[0.08]" style={{
         backgroundImage: "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.6) 1px, transparent 0)",
         backgroundSize: "32px 32px",
       }} />
-      <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-5 lg:px-8">
         <SectionEyebrow tone="gold">{settings.why_eyebrow}</SectionEyebrow>
-        <h2 className="mt-4 max-w-3xl font-display text-4xl font-medium sm:text-5xl">
+        <h2 className="mt-4 max-w-3xl font-display text-3xl font-medium sm:text-4xl md:text-5xl">
           {settings.why_title}
         </h2>
-        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid gap-4 sm:mt-12 sm:grid-cols-2 lg:grid-cols-3">
           {reasons.map((r, i) => (
             <div
               key={r}
@@ -580,19 +580,19 @@ function WhyUs({ settings }: { settings: PublicSettings }) {
 function Testimonials({ settings }: { settings: PublicSettings }) {
   const items = settings.testimonials ?? [];
   return (
-    <section id="testimonials" className="bg-background py-24 lg:py-32">
-      <div className="mx-auto max-w-7xl px-5 lg:px-8">
+    <section id="testimonials" className="bg-background py-16 sm:py-20 lg:py-32">
+      <div className="mx-auto max-w-7xl px-4 sm:px-5 lg:px-8">
         <div className="max-w-2xl">
           <SectionEyebrow>{settings.testimonials_eyebrow}</SectionEyebrow>
-          <h2 className="mt-4 font-display text-4xl font-medium text-navy sm:text-5xl">
+          <h2 className="mt-4 font-display text-3xl font-medium text-navy sm:text-4xl md:text-5xl">
             {settings.testimonials_title}
           </h2>
         </div>
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
+        <div className="mt-8 grid gap-5 sm:mt-12 sm:gap-6 md:grid-cols-3">
           {items.map((t) => (
             <figure
               key={t.name}
-              className="flex flex-col rounded-2xl border border-border bg-card p-8 shadow-sm"
+              className="flex flex-col rounded-2xl border border-border bg-card p-6 shadow-sm sm:p-8"
             >
               <div className="flex gap-1 text-gold">
                 {Array.from({ length: 5 }).map((_, i) => (
@@ -647,15 +647,15 @@ function Contact({ settings }: { settings: PublicSettings }) {
   }
 
   return (
-    <section id="contact" className="bg-muted/50 py-24 lg:py-32">
-      <div className="mx-auto max-w-7xl px-5 lg:px-8">
+    <section id="contact" className="bg-muted/50 py-16 sm:py-20 lg:py-32">
+      <div className="mx-auto max-w-7xl px-4 sm:px-5 lg:px-8">
         <div className="max-w-2xl">
           <SectionEyebrow>{settings.contact_eyebrow}</SectionEyebrow>
-          <h2 className="mt-4 font-display text-4xl font-medium text-navy sm:text-5xl">{settings.contact_title}</h2>
+          <h2 className="mt-4 font-display text-3xl font-medium text-navy sm:text-4xl md:text-5xl">{settings.contact_title}</h2>
           <p className="mt-4 text-muted-foreground">{settings.contact_subtitle}</p>
         </div>
 
-        <div className="mt-12 grid gap-8 lg:grid-cols-5">
+        <div className="mt-8 grid gap-6 sm:mt-12 sm:gap-8 lg:grid-cols-5">
           <div className="space-y-5 lg:col-span-2">
             <ContactRow
               icon={Phone}
@@ -799,7 +799,7 @@ function Footer({ settings }: { settings: PublicSettings }) {
   const copyright = (settings.footer_copyright || "").replace("{year}", String(new Date().getFullYear()));
   return (
     <footer className="border-t border-border bg-navy-deep text-white/80">
-      <div className="mx-auto grid max-w-7xl gap-10 px-5 py-14 sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
+      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-5 sm:py-14 sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
         <div>
           <div className="flex items-center gap-3">
             <span className="grid h-12 w-12 place-items-center rounded-full bg-gold text-navy-deep ring-2 ring-gold/40 shadow-sm">
@@ -868,7 +868,7 @@ function SocialLink({ href, label, children }: { href: string; label: string; ch
 
 function FloatingContacts({ settings }: { settings: PublicSettings }) {
   return (
-    <div className="fixed bottom-5 right-5 z-40 flex flex-col gap-3">
+    <div className="fixed bottom-4 right-4 z-40 sm:bottom-5 sm:right-5 flex flex-col gap-3">
       {settings.whatsapp_number && (
       <FloatBtn href={waHref(settings.whatsapp_number)} label="WhatsApp" className="bg-[#25D366] hover:brightness-110">
         <MessageCircle className="h-6 w-6" />
