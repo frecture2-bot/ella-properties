@@ -111,7 +111,7 @@ function Header({ settings }: { settings: PublicSettings }) {
   const nav = settings.nav_links ?? [];
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3 lg:px-8">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-5 lg:px-8">
         <a href="#top" className="flex min-w-0 shrink items-center gap-2">
           <Logo settings={settings} />
         </a>
@@ -151,7 +151,7 @@ function Header({ settings }: { settings: PublicSettings }) {
       </div>
       {open && (
         <div className="border-t border-border/60 bg-background lg:hidden">
-          <nav className="mx-auto flex max-w-7xl flex-col gap-1 px-5 py-3">
+          <nav className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-3 sm:px-5">
             {nav.map((n) => (
               <a
                 key={n.href}
@@ -285,7 +285,7 @@ function Hero({ settings }: { settings: PublicSettings }) {
 function About({ settings }: { settings: PublicSettings }) {
   return (
     <section id="about" className="bg-background py-16 sm:py-20 lg:py-32">
-      <div className="mx-auto grid max-w-7xl gap-14 px-5 lg:grid-cols-2 lg:gap-20 lg:px-8">
+      <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:gap-14 sm:px-5 lg:grid-cols-2 lg:gap-20 lg:px-8">
         <div>
           <SectionEyebrow>За нас</SectionEyebrow>
           <h2 className="mt-4 font-display text-3xl font-medium text-navy sm:text-4xl md:text-5xl">
@@ -547,7 +547,7 @@ function PropertyCard({ p }: { p: (typeof properties)[number] }) {
 function WhyUs({ settings }: { settings: PublicSettings }) {
   const reasons = settings.why_reasons ?? [];
   return (
-    <section id="why" className="relative overflow-hidden bg-navy-deep py-24 text-white lg:py-32">
+    <section id="why" className="relative overflow-hidden bg-navy-deep py-16 text-white sm:py-20 lg:py-32">
       <div className="absolute inset-0 opacity-[0.08]" style={{
         backgroundImage: "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.6) 1px, transparent 0)",
         backgroundSize: "32px 32px",
@@ -799,7 +799,7 @@ function Footer({ settings }: { settings: PublicSettings }) {
   const copyright = (settings.footer_copyright || "").replace("{year}", String(new Date().getFullYear()));
   return (
     <footer className="border-t border-border bg-navy-deep text-white/80">
-      <div className="mx-auto grid max-w-7xl gap-10 px-5 py-14 sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
+      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-5 sm:py-14 sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
         <div>
           <div className="flex items-center gap-3">
             <span className="grid h-12 w-12 place-items-center rounded-full bg-gold text-navy-deep ring-2 ring-gold/40 shadow-sm">
