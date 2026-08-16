@@ -914,7 +914,7 @@ function Footer({ settings }: { settings: PublicSettings }) {
           </div>
         </div>
       </div>
-      <div className="border-t border-white/10 py-6 text-center text-xs text-white/50">
+      <div className="border-t border-white/10 px-4 pb-24 pt-6 text-center text-xs text-white/50 sm:px-6 sm:pb-6">
         {copyright}
       </div>
     </footer>
