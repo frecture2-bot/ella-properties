@@ -915,7 +915,7 @@ function Footer({ settings }: { settings: PublicSettings }) {
         </div>
       </div>
       <div className="border-t border-white/10 px-6 pb-24 pt-6 sm:px-6 sm:pb-6">
-        <p className="mx-auto max-w-md text-center text-xs leading-relaxed text-white/50">{copyright}</p>
+        <p className="mx-auto max-w-[15rem] text-center text-xs leading-relaxed text-white/50 sm:max-w-md">{copyright}</p>
       </div>
     </footer>
   );
