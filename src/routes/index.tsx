@@ -43,6 +43,7 @@ import { cn } from "@/lib/utils";
 
 import heroImage from "@/assets/hero.jpg";
 import { properties, type PropertyType } from "@/data/properties";
+import { usePublicProperties } from "@/hooks/use-public-properties";
 import { supabase } from "@/integrations/supabase/client";
 import { useSiteSettings, type PublicSettings } from "@/hooks/use-site-settings";
 
@@ -451,14 +452,15 @@ function Catalog({ settings }: { settings: PublicSettings }) {
   const [district, setDistrict] = useState<string>("Всички");
   const [maxPrice, setMaxPrice] = useState<string>("");
   const [minArea, setMinArea] = useState<string>("");
+  const { properties: list } = usePublicProperties();
 
   const districts = useMemo(
-    () => ["Всички", ...Array.from(new Set(properties.map((p) => p.district)))],
-    [],
+    () => ["Всички", ...Array.from(new Set(list.map((p) => p.district).filter(Boolean)))],
+    [list],
   );
 
   const filtered = useMemo(() => {
-    return properties.filter((p) => {
+    return list.filter((p) => {
       if (type !== "Всички" && p.type !== type) return false;
       if (listing !== "Всички" && p.listing !== listing) return false;
       if (district !== "Всички" && p.district !== district) return false;
@@ -466,7 +468,7 @@ function Catalog({ settings }: { settings: PublicSettings }) {
       if (minArea && p.area < Number(minArea)) return false;
       return true;
     });
-  }, [type, listing, district, maxPrice, minArea]);
+  }, [list, type, listing, district, maxPrice, minArea]);
 
   return (
     <section id="catalog" className="bg-background py-16 sm:py-20 lg:py-32">
