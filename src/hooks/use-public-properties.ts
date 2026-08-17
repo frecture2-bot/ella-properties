@@ -41,6 +41,6 @@ export function usePublicProperties() {
   });
 
   // Once there is at least one real listing, demo properties disappear.
-  const list = data && data.length > 0 ? data : isLoading || !data ? demoProperties : [];
+  const list = data && data.length > 0 ? data : demoProperties;
   return { properties: list, isLoading, hasReal: !!data && data.length > 0 };
 }
