@@ -43,6 +43,7 @@ import { cn } from "@/lib/utils";
 
 import heroImage from "@/assets/hero.jpg";
 import { properties, type PropertyType } from "@/data/properties";
+import { usePublicProperties } from "@/hooks/use-public-properties";
 import { supabase } from "@/integrations/supabase/client";
 import { useSiteSettings, type PublicSettings } from "@/hooks/use-site-settings";
 
