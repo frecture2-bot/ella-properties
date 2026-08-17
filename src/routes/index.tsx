@@ -875,9 +875,17 @@ function Footer({ settings }: { settings: PublicSettings }) {
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-5 sm:py-14 sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
         <div>
           <div className="flex items-center gap-3">
-            <span className="grid h-12 w-12 place-items-center rounded-full bg-gold text-navy-deep ring-2 ring-gold/40 shadow-sm">
-              <span className="font-display text-2xl font-semibold">{(settings.brand_name || "Е").charAt(0)}</span>
-            </span>
+            {settings.logo_url ? (
+              <img
+                src={settings.logo_url}
+                alt={settings.brand_name || "Елла Недвижими Имоти"}
+                className="h-12 w-auto shrink-0 rounded-md object-cover"
+              />
+            ) : (
+              <span className="grid h-12 w-12 place-items-center rounded-full bg-gold text-navy-deep ring-2 ring-gold/40 shadow-sm">
+                <span className="font-display text-2xl font-semibold">{(settings.brand_name || "Е").charAt(0)}</span>
+              </span>
+            )}
             <div>
               <div className="font-display text-[1.35rem] font-semibold leading-[1.05] tracking-tight text-white">
                 <span className="text-blue-400">{(settings.brand_name || "Елла").split(" ")[0]}</span>
