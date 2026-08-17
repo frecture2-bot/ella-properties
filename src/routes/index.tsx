@@ -255,11 +255,13 @@ function Logo({ settings }: { settings: PublicSettings }) {
   if (settings.logo_url) {
     return (
       <span className="flex min-w-0 items-center gap-3">
-        <img
-          src={settings.logo_url}
-          alt={name}
-          className="h-14 w-auto shrink-0 rounded-lg object-cover lg:h-16"
-        />
+        <span className="shrink-0 overflow-hidden rounded-lg">
+          <img
+            src={settings.logo_url}
+            alt={name}
+            className="h-14 w-auto scale-110 object-cover lg:h-16"
+          />
+        </span>
         {NameText}
       </span>
     );
@@ -876,11 +878,13 @@ function Footer({ settings }: { settings: PublicSettings }) {
         <div>
           <div className="flex items-center gap-3">
             {settings.logo_url ? (
-              <img
-                src={settings.logo_url}
-                alt={settings.brand_name || "Елла Недвижими Имоти"}
-                className="h-16 w-auto shrink-0 rounded-lg object-cover lg:h-20"
-              />
+              <span className="shrink-0 overflow-hidden rounded-lg">
+                <img
+                  src={settings.logo_url}
+                  alt={settings.brand_name || "Елла Недвижими Имоти"}
+                  className="h-16 w-auto scale-110 object-cover lg:h-20"
+                />
+              </span>
             ) : (
               <span className="grid h-16 w-16 place-items-center rounded-full bg-gold text-navy-deep ring-2 ring-gold/40 shadow-sm lg:h-20 lg:w-20">
                 <span className="font-display text-2xl font-semibold">{(settings.brand_name || "Е").charAt(0)}</span>
