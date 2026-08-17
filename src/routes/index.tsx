@@ -258,7 +258,7 @@ function Logo({ settings }: { settings: PublicSettings }) {
         <img
           src={settings.logo_url}
           alt={name}
-          className="h-12 w-auto shrink-0 rounded-md object-cover lg:h-14"
+          className="h-14 w-auto shrink-0 rounded-lg object-cover lg:h-16"
         />
         {NameText}
       </span>
@@ -267,7 +267,7 @@ function Logo({ settings }: { settings: PublicSettings }) {
   const letter = name.trim().charAt(0);
   return (
     <span className="flex min-w-0 items-center gap-3">
-      <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-navy text-gold ring-2 ring-gold/40 shadow-sm lg:h-14 lg:w-14">
+      <span className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-navy text-gold ring-2 ring-gold/40 shadow-sm lg:h-16 lg:w-16">
         <span className="font-display text-2xl font-semibold leading-none lg:text-3xl">{letter}</span>
       </span>
       {NameText}
@@ -879,10 +879,10 @@ function Footer({ settings }: { settings: PublicSettings }) {
               <img
                 src={settings.logo_url}
                 alt={settings.brand_name || "Елла Недвижими Имоти"}
-                className="h-12 w-auto shrink-0 rounded-md object-cover"
+                className="h-16 w-auto shrink-0 rounded-lg object-cover lg:h-20"
               />
             ) : (
-              <span className="grid h-12 w-12 place-items-center rounded-full bg-gold text-navy-deep ring-2 ring-gold/40 shadow-sm">
+              <span className="grid h-16 w-16 place-items-center rounded-full bg-gold text-navy-deep ring-2 ring-gold/40 shadow-sm lg:h-20 lg:w-20">
                 <span className="font-display text-2xl font-semibold">{(settings.brand_name || "Е").charAt(0)}</span>
               </span>
             )}
