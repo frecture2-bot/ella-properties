@@ -7,6 +7,14 @@ import prop6 from "@/assets/prop-6.jpg";
 
 export type PropertyType = "Апартамент" | "Къща" | "Парцел" | "Бизнес имот";
 export type Listing = "Продажба" | "Наем";
+export const APARTMENT_LAYOUTS = [
+  "Едностаен",
+  "Двустаен",
+  "Тристаен",
+  "Четиристаен",
+  "Мезонет",
+] as const;
+export type ApartmentLayout = (typeof APARTMENT_LAYOUTS)[number];
 
 export interface Property {
   id: string;
@@ -17,6 +25,7 @@ export interface Property {
   district: string;
   price: number;
   area: number;
+  layout?: ApartmentLayout;
   floor?: string;
   image: string;
   description: string;

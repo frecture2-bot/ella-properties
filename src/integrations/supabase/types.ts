@@ -93,6 +93,7 @@ export type Database = {
           id: string
           is_featured: boolean
           is_published: boolean
+          layout: string | null
           main_image: string | null
           map_lat: number | null
           map_lng: number | null
@@ -121,6 +122,7 @@ export type Database = {
           id?: string
           is_featured?: boolean
           is_published?: boolean
+          layout?: string | null
           main_image?: string | null
           map_lat?: number | null
           map_lng?: number | null
@@ -149,6 +151,7 @@ export type Database = {
           id?: string
           is_featured?: boolean
           is_published?: boolean
+          layout?: string | null
           main_image?: string | null
           map_lat?: number | null
           map_lng?: number | null

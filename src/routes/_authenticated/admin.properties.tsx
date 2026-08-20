@@ -24,6 +24,7 @@ export const Route = createFileRoute("/_authenticated/admin/properties")({
 });
 
 const TYPES = ["Апартамент", "Къща", "Парцел", "Офис", "Магазин", "Бизнес имот"] as const;
+const LAYOUTS = ["Едностаен", "Двустаен", "Тристаен", "Четиристаен", "Мезонет"] as const;
 const STATUSES = ["Продава", "Под наем", "Продаден", "Отдаден"] as const;
 type PropType = typeof TYPES[number];
 type PropStatus = typeof STATUSES[number];
@@ -40,6 +41,7 @@ const empty = {
   address: "",
   area: null as number | null,
   rooms: null as number | null,
+  layout: "",
   floor: "",
   description: "",
   main_image: "",
@@ -207,6 +209,7 @@ function PropertyDialog({
           address: editing.address ?? "",
           area: editing.area,
           rooms: editing.rooms,
+          layout: editing.layout ?? "",
           floor: editing.floor ?? "",
           description: editing.description ?? "",
           main_image: editing.main_image ?? "",
@@ -290,6 +293,7 @@ function PropertyDialog({
         price: Number(form.price),
         area: form.area ? Number(form.area) : null,
         rooms: form.rooms ? Number(form.rooms) : null,
+        layout: form.layout || null,
         map_lat: form.map_lat ? Number(form.map_lat) : null,
         map_lng: form.map_lng ? Number(form.map_lng) : null,
         main_image: form.main_image || images[0]?.url || null,
@@ -369,6 +373,21 @@ function PropertyDialog({
           <div className="grid gap-4 sm:grid-cols-3">
             <Field label="Град"><Input value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} /></Field>
             <Field label="Квартал"><Input value={form.district} onChange={(e) => setForm({ ...form, district: e.target.value })} /></Field>
+            <Field label="Вид апартамент">
+              <Select
+                value={form.layout || "none"}
+                onValueChange={(v) => setForm({ ...form, layout: v === "none" ? "" : v })}
+              >
+                <SelectTrigger><SelectValue placeholder="Без" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">Без</SelectItem>
+                  {LAYOUTS.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </Field>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-3">
             <Field label="Етаж"><Input value={form.floor} onChange={(e) => setForm({ ...form, floor: e.target.value })} placeholder="напр. 4 / 6" /></Field>
           </div>
 
