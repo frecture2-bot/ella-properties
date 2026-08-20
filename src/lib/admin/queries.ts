@@ -12,6 +12,7 @@ export type PropertyRow = {
   address: string | null;
   area: number | null;
   rooms: number | null;
+  layout: string | null;
   floor: string | null;
   description: string | null;
   main_image: string | null;

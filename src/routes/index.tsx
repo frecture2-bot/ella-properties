@@ -42,7 +42,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
 
 import heroImage from "@/assets/hero.jpg";
-import { properties, type PropertyType } from "@/data/properties";
+import { properties, type PropertyType, APARTMENT_LAYOUTS } from "@/data/properties";
 import { usePublicProperties } from "@/hooks/use-public-properties";
 import { supabase } from "@/integrations/supabase/client";
 import { useSiteSettings, type PublicSettings } from "@/hooks/use-site-settings";
@@ -452,6 +452,7 @@ function Catalog({ settings }: { settings: PublicSettings }) {
   const [type, setType] = useState<string>("Всички");
   const [listing, setListing] = useState<string>("Всички");
   const [district, setDistrict] = useState<string>("Всички");
+  const [layout, setLayout] = useState<string>("Всички");
   const [maxPrice, setMaxPrice] = useState<string>("");
   const [minArea, setMinArea] = useState<string>("");
   const { properties: list } = usePublicProperties();
@@ -466,11 +467,12 @@ function Catalog({ settings }: { settings: PublicSettings }) {
       if (type !== "Всички" && p.type !== type) return false;
       if (listing !== "Всички" && p.listing !== listing) return false;
       if (district !== "Всички" && p.district !== district) return false;
+      if (layout !== "Всички" && p.layout !== layout) return false;
       if (maxPrice && p.price > Number(maxPrice)) return false;
       if (minArea && p.area < Number(minArea)) return false;
       return true;
     });
-  }, [list, type, listing, district, maxPrice, minArea]);
+  }, [list, type, listing, district, layout, maxPrice, minArea]);
 
   return (
     <section id="catalog" className="bg-background py-16 sm:py-20 lg:py-32">
@@ -480,9 +482,10 @@ function Catalog({ settings }: { settings: PublicSettings }) {
           {settings.catalog_title}
         </h2>
 
-        <div className="mt-8 grid gap-4 rounded-2xl border border-border bg-card p-4 sm:mt-10 sm:p-5 shadow-sm sm:grid-cols-2 lg:grid-cols-5">
+        <div className="mt-8 grid gap-4 rounded-2xl border border-border bg-card p-4 sm:mt-10 sm:p-5 shadow-sm sm:grid-cols-2 lg:grid-cols-6">
           <FilterSelect label="Вид имот" value={type} onChange={setType} options={PROPERTY_TYPES as string[]} />
           <FilterSelect label="Тип сделка" value={listing} onChange={setListing} options={["Всички", "Продажба", "Наем"]} />
+          <FilterSelect label="Вид апартамент" value={layout} onChange={setLayout} options={["Всички", ...APARTMENT_LAYOUTS]} />
           <FilterSelect label="Квартал" value={district} onChange={setDistrict} options={districts} />
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="filter-max-price" className="text-xs uppercase tracking-wider text-muted-foreground">Цена до (€)</Label>
@@ -589,6 +592,11 @@ function PropertyCard({ p }: { p: (typeof properties)[number] }) {
           {p.floor && (
             <span className="inline-flex items-center gap-1.5">
               <Layers className="h-3.5 w-3.5 text-gold" /> Етаж {p.floor}
+            </span>
+          )}
+          {p.layout && (
+            <span className="inline-flex items-center gap-1.5">
+              <Layers className="h-3.5 w-3.5 text-gold" /> {p.layout}
             </span>
           )}
         </div>
@@ -727,7 +735,7 @@ function Contact({ settings }: { settings: PublicSettings }) {
           <p className="mt-4 text-muted-foreground">{settings.contact_subtitle}</p>
         </div>
 
-        <div className="mt-8 grid gap-6 sm:mt-12 sm:gap-8 lg:grid-cols-5">
+        <div className="mt-8 grid gap-6 sm:mt-12 sm:gap-8 lg:grid-cols-6">
           <div className="space-y-5 lg:col-span-2">
             <ContactRow
               icon={Phone}
