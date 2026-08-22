@@ -226,14 +226,17 @@ function PropertyDialog({
           .select("*")
           .eq("property_id", editing.id)
           .order("sort_order");
-        setImages((data ?? []).map((i) => ({ id: i.id, url: i.url, storage_path: i.storage_path, sort_order: i.sort_order })));
+        if (!cancelled) {
+          setImages((data ?? []).map((i) => ({ id: i.id, url: i.url, storage_path: i.storage_path, sort_order: i.sort_order })));
+        }
       } else {
         setForm(empty);
         setImages([]);
       }
-      return true;
-    },
-  });
+    })();
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, editing?.id]);
 
   async function uploadFiles(files: FileList | null) {
     if (!files || files.length === 0) return;
