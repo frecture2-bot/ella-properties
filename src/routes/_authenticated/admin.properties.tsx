@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Pencil, Trash2, Eye, EyeOff, Search, Upload, X, Image as ImageIcon } from "lucide-react";
 import { toast } from "sonner";
@@ -192,12 +192,11 @@ function PropertyDialog({
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  // Reset form when dialog opens
-  useState(() => {});
-  useQuery({
-    queryKey: ["property-images", editing?.id ?? "new", open],
-    enabled: open,
-    queryFn: async () => {
+  // Initialize the form once, when the dialog opens
+  useEffect(() => {
+    if (!open) return;
+    let cancelled = false;
+    (async () => {
       if (editing) {
         setForm({
           title: editing.title,
@@ -227,14 +226,17 @@ function PropertyDialog({
           .select("*")
           .eq("property_id", editing.id)
           .order("sort_order");
-        setImages((data ?? []).map((i) => ({ id: i.id, url: i.url, storage_path: i.storage_path, sort_order: i.sort_order })));
+        if (!cancelled) {
+          setImages((data ?? []).map((i) => ({ id: i.id, url: i.url, storage_path: i.storage_path, sort_order: i.sort_order })));
+        }
       } else {
         setForm(empty);
         setImages([]);
       }
-      return true;
-    },
-  });
+    })();
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, editing?.id]);
 
   async function uploadFiles(files: FileList | null) {
     if (!files || files.length === 0) return;
