@@ -192,12 +192,11 @@ function PropertyDialog({
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  // Reset form when dialog opens
-  useState(() => {});
-  useQuery({
-    queryKey: ["property-images", editing?.id ?? "new", open],
-    enabled: open,
-    queryFn: async () => {
+  // Initialize the form once, when the dialog opens
+  useEffect(() => {
+    if (!open) return;
+    let cancelled = false;
+    (async () => {
       if (editing) {
         setForm({
           title: editing.title,
