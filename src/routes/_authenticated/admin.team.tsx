@@ -55,28 +55,21 @@ function TeamAdmin() {
   async function uploadPhoto(file: File) {
     setUploading(true);
     try {
-      const ALLOWED: Record<string, string> = {
-        "image/jpeg": "jpg",
-        "image/png": "png",
-        "image/webp": "webp",
-        "image/gif": "gif",
-      };
-      if (!ALLOWED[file.type]) {
-        toast.error("Неподдържан файл. Разрешени: JPG, PNG, WEBP, GIF.");
+      if (!isImageFile(file)) {
+        toast.error("Неподдържан файл.");
         return;
       }
-      if (file.size > 10 * 1024 * 1024) {
-        toast.error("Файлът е твърде голям (макс. 10MB)");
+      if (file.size > MAX_UPLOAD_BYTES) {
+        toast.error("Файлът е твърде голям (макс. 25MB)");
         return;
       }
-      const path = `team/${crypto.randomUUID()}.${ALLOWED[file.type]}`;
+      const path = `team/${crypto.randomUUID()}.${fileExt(file)}`;
       const { error } = await supabase.storage.from("property-images").upload(path, file, {
-        contentType: file.type,
+        contentType: file.type || "application/octet-stream",
         upsert: false,
       });
       if (error) throw error;
-      const { data } = supabase.storage.from("property-images").getPublicUrl(path);
-      setForm((f) => ({ ...f, photo_url: data.publicUrl }));
+      setForm((f) => ({ ...f, photo_url: mediaUrl(path) }));
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Грешка");
     } finally { setUploading(false); }
