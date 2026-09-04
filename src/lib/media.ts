@@ -17,3 +17,21 @@ export const MAX_UPLOAD_BYTES = 25 * 1024 * 1024;
 export function isImageFile(file: File) {
   return file.type.startsWith("image/") || /\.(jpe?g|png|webp|gif|avif|bmp|tiff?|svg|heic|heif|jfif|ico)$/i.test(file.name);
 }
+
+export function isVideoFile(file: File) {
+  return file.type.startsWith("video/") || /\.(mp4|webm|ogv|ogg|mov|m4v|avi|mkv)$/i.test(file.name);
+}
+
+/** True when a stored media URL points at a video file. */
+export function isVideoUrl(url: string) {
+  return /\.(mp4|webm|ogv|ogg|mov|m4v|avi|mkv)(\?|$)/i.test(url);
+}
+
+/** Turns a YouTube/Vimeo link into an embeddable URL, or null when not supported. */
+export function embedUrl(url: string): string | null {
+  const yt = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{6,})/i);
+  if (yt) return `https://www.youtube.com/embed/${yt[1]}`;
+  const vm = url.match(/vimeo\.com\/(?:video\/)?(\d+)/i);
+  if (vm) return `https://player.vimeo.com/video/${vm[1]}`;
+  return null;
+}
