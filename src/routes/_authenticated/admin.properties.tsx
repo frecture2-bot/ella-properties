@@ -5,6 +5,7 @@ import { Plus, Pencil, Trash2, Eye, EyeOff, Search, Upload, X, Image as ImageIco
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
+import { mediaUrl, fileExt, isImageFile, MAX_UPLOAD_BYTES } from "@/lib/media";
 import type { PropertyRow } from "@/lib/admin/queries";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -242,27 +243,23 @@ function PropertyDialog({
     if (!files || files.length === 0) return;
     setUploading(true);
     try {
-      const ALLOWED = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
-      const EXT: Record<string, string> = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp", "image/gif": "gif" };
       const uploaded: Img[] = [];
       for (const file of Array.from(files)) {
-        if (!ALLOWED.has(file.type)) {
-          toast.error(`Неподдържан файл: ${file.name}. Разрешени: JPG, PNG, WEBP, GIF.`);
+        if (!isImageFile(file)) {
+          toast.error(`Неподдържан файл: ${file.name}`);
           continue;
         }
-        if (file.size > 10 * 1024 * 1024) {
-          toast.error(`Файлът е твърде голям: ${file.name} (макс. 10MB)`);
+        if (file.size > MAX_UPLOAD_BYTES) {
+          toast.error(`Файлът е твърде голям: ${file.name} (макс. 25MB)`);
           continue;
         }
-        const ext = EXT[file.type];
-        const path = `${crypto.randomUUID()}.${ext}`;
+        const path = `${crypto.randomUUID()}.${fileExt(file)}`;
         const { error } = await supabase.storage.from("property-images").upload(path, file, {
-          contentType: file.type,
+          contentType: file.type || "application/octet-stream",
           upsert: false,
         });
         if (error) throw error;
-        const { data } = supabase.storage.from("property-images").getPublicUrl(path);
-        uploaded.push({ url: data.publicUrl, storage_path: path, sort_order: images.length + uploaded.length });
+        uploaded.push({ url: mediaUrl(path), storage_path: path, sort_order: images.length + uploaded.length });
       }
       const next = [...images, ...uploaded];
       setImages(next);
