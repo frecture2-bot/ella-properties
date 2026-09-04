@@ -5,6 +5,7 @@ import { Plus, Pencil, Trash2, Upload } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
+import { mediaUrl, fileExt, isImageFile, MAX_UPLOAD_BYTES } from "@/lib/media";
 import type { TeamRow } from "@/lib/admin/queries";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";

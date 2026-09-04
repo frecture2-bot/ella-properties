@@ -5,6 +5,7 @@ import { Plus, Pencil, Trash2, Eye, EyeOff, Search, Upload, X, Image as ImageIco
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
+import { mediaUrl, fileExt, isImageFile, MAX_UPLOAD_BYTES } from "@/lib/media";
 import type { PropertyRow } from "@/lib/admin/queries";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
