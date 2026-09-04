@@ -245,7 +245,7 @@ function PropertyDialog({
     try {
       const uploaded: Img[] = [];
       for (const file of Array.from(files)) {
-        if (!isImageFile(file)) {
+        if (!isImageFile(file) && !isVideoFile(file)) {
           toast.error(`Неподдържан файл: ${file.name}`);
           continue;
         }
@@ -398,7 +398,7 @@ function PropertyDialog({
 
           {/* Images */}
           <div>
-            <Label>Снимки</Label>
+            <Label>Снимки и видеа</Label>
             <div className="mt-2 grid grid-cols-3 gap-3 sm:grid-cols-4">
               {images.map((img, idx) => (
                 <div key={idx} className="group relative aspect-square overflow-hidden rounded-lg border">
@@ -420,7 +420,7 @@ function PropertyDialog({
                 {uploading ? <span className="text-xs">Качване...</span> : (
                   <><Upload className="h-5 w-5" /><span className="text-xs">Качи</span></>
                 )}
-                <input type="file" accept="image/*" multiple className="hidden" onChange={(e) => uploadFiles(e.target.files)} />
+                <input type="file" accept="image/*,video/*" multiple className="hidden" onChange={(e) => uploadFiles(e.target.files)} />
               </label>
             </div>
           </div>
