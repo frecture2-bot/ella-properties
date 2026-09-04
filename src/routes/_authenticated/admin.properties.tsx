@@ -5,7 +5,7 @@ import { Plus, Pencil, Trash2, Eye, EyeOff, Search, Upload, X, Image as ImageIco
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
-import { mediaUrl, fileExt, isImageFile, MAX_UPLOAD_BYTES } from "@/lib/media";
+import { mediaUrl, fileExt, isImageFile, isVideoFile, isVideoUrl, MAX_UPLOAD_BYTES } from "@/lib/media";
 import type { PropertyRow } from "@/lib/admin/queries";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -402,7 +402,11 @@ function PropertyDialog({
             <div className="mt-2 grid grid-cols-3 gap-3 sm:grid-cols-4">
               {images.map((img, idx) => (
                 <div key={idx} className="group relative aspect-square overflow-hidden rounded-lg border">
-                  <img src={img.url} alt="" className="h-full w-full object-cover" />
+                  {isVideoUrl(img.url) ? (
+                    <video src={img.url} className="h-full w-full object-cover" muted playsInline />
+                  ) : (
+                    <img src={img.url} alt="" className="h-full w-full object-cover" />
+                  )}
                   <button type="button" onClick={() => removeImage(idx)} className="absolute right-1 top-1 grid h-7 w-7 place-items-center rounded-full bg-black/60 text-white opacity-0 transition-opacity group-hover:opacity-100">
                     <X className="h-3.5 w-3.5" />
                   </button>
