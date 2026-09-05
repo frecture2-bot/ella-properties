@@ -30,6 +30,11 @@ const STATUSES = ["Продава", "Под наем", "Продаден", "От
 type PropType = typeof TYPES[number];
 type PropStatus = typeof STATUSES[number];
 
+// Кои полета имат смисъл за даден тип имот
+const hasLayout = (t: PropType) => t === "Апартамент";
+const hasFloor = (t: PropType) => t === "Апартамент" || t === "Офис" || t === "Магазин" || t === "Бизнес имот";
+const hasRooms = (t: PropType) => t !== "Парцел";
+
 type Img = { id?: string; url: string; storage_path?: string | null; sort_order: number };
 
 const empty = {
