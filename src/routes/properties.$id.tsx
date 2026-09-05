@@ -141,7 +141,7 @@ export const Route = createFileRoute("/properties/$id")({
 
 function PropertyDetail() {
   const p = Route.useLoaderData();
-  const { settings } = useSiteSettings();
+  const settings = useSiteSettings();
   const [active, setActive] = useState(0);
 
   const priceText = new Intl.NumberFormat("bg-BG").format(p.price);

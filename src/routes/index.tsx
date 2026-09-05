@@ -610,12 +610,25 @@ function PropertyCard({ p }: { p: (typeof properties)[number] }) {
               )}
             </div>
           </div>
-          <Button
-            asChild
-            className="rounded-full bg-navy text-white hover:bg-navy-deep"
-          >
-            <a href="#contact">Заяви оглед</a>
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              asChild
+              variant="outline"
+              size="sm"
+              className="rounded-full"
+            >
+              <Link to="/properties/$id" params={{ id: p.id }}>
+                Виж още
+              </Link>
+            </Button>
+            <Button
+              asChild
+              size="sm"
+              className="rounded-full bg-navy text-white hover:bg-navy-deep"
+            >
+              <a href="#contact">Заяви оглед</a>
+            </Button>
+          </div>
         </div>
       </div>
     </article>
