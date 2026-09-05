@@ -32,7 +32,7 @@ type PropStatus = typeof STATUSES[number];
 
 // Кои полета имат смисъл за даден тип имот
 const hasLayout = (t: PropType) => t === "Апартамент";
-const hasFloor = (t: PropType) => t === "Апартамент" || t === "Офис" || t === "Магазин" || t === "Бизнес имот";
+const hasFloor = (t: PropType) => t === "Апартамент" || t === "Офис" || t === "Магазин" || t === "Бизнес имот" || t === "Къща";
 const hasRooms = (t: PropType) => t !== "Парцел";
 
 type Img = { id?: string; url: string; storage_path?: string | null; sort_order: number };
@@ -398,7 +398,11 @@ function PropertyDialog({
 
           {hasFloor(form.type) && (
             <div className="grid gap-4 sm:grid-cols-3">
-              <Field label="Етаж"><Input value={form.floor} onChange={(e) => setForm({ ...form, floor: e.target.value })} placeholder="напр. 4 / 6" /></Field>
+              {form.type === "Къща" ? (
+                <Field label="Брой етажи"><Input type="number" min={1} value={form.floor} onChange={(e) => setForm({ ...form, floor: e.target.value })} placeholder="напр. 2" /></Field>
+              ) : (
+                <Field label="Етаж"><Input value={form.floor} onChange={(e) => setForm({ ...form, floor: e.target.value })} placeholder="напр. 4 / 6" /></Field>
+              )}
             </div>
           )}
 
