@@ -483,9 +483,19 @@ function Catalog({ settings }: { settings: PublicSettings }) {
         </h2>
 
         <div className="mt-8 grid gap-4 rounded-2xl border border-border bg-card p-4 sm:mt-10 sm:p-5 shadow-sm sm:grid-cols-2 lg:grid-cols-6">
-          <FilterSelect label="Вид имот" value={type} onChange={setType} options={PROPERTY_TYPES as string[]} />
+          <FilterSelect
+            label="Вид имот"
+            value={type}
+            onChange={(v) => {
+              setType(v);
+              if (v !== "Апартамент") setLayout("Всички");
+            }}
+            options={PROPERTY_TYPES as string[]}
+          />
           <FilterSelect label="Тип сделка" value={listing} onChange={setListing} options={["Всички", "Продажба", "Наем"]} />
-          <FilterSelect label="Вид апартамент" value={layout} onChange={setLayout} options={["Всички", ...APARTMENT_LAYOUTS]} />
+          {type === "Апартамент" && (
+            <FilterSelect label="Вид апартамент" value={layout} onChange={setLayout} options={["Всички", ...APARTMENT_LAYOUTS]} />
+          )}
           <FilterSelect label="Квартал" value={district} onChange={setDistrict} options={districts} />
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="filter-max-price" className="text-xs uppercase tracking-wider text-muted-foreground">Цена до (€)</Label>
