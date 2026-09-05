@@ -369,9 +369,11 @@ function PropertyDialog({
             <Field label="Квадратура (м²)">
               <Input type="number" value={form.area ?? ""} onChange={(e) => setForm({ ...form, area: e.target.value ? Number(e.target.value) : null })} />
             </Field>
-            <Field label="Стаи">
-              <Input type="number" value={form.rooms ?? ""} onChange={(e) => setForm({ ...form, rooms: e.target.value ? Number(e.target.value) : null })} />
-            </Field>
+            {hasRooms(form.type) && (
+              <Field label="Стаи">
+                <Input type="number" value={form.rooms ?? ""} onChange={(e) => setForm({ ...form, rooms: e.target.value ? Number(e.target.value) : null })} />
+              </Field>
+            )}
           </div>
 
           <div className="grid gap-4 sm:grid-cols-3">
