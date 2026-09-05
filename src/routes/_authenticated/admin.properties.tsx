@@ -379,23 +379,27 @@ function PropertyDialog({
           <div className="grid gap-4 sm:grid-cols-3">
             <Field label="Град"><Input value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} /></Field>
             <Field label="Квартал"><Input value={form.district} onChange={(e) => setForm({ ...form, district: e.target.value })} /></Field>
-            <Field label="Вид апартамент">
-              <Select
-                value={form.layout || "none"}
-                onValueChange={(v) => setForm({ ...form, layout: v === "none" ? "" : v })}
-              >
-                <SelectTrigger><SelectValue placeholder="Без" /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="none">Без</SelectItem>
-                  {LAYOUTS.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
-                </SelectContent>
-              </Select>
-            </Field>
+            {hasLayout(form.type) && (
+              <Field label="Вид апартамент">
+                <Select
+                  value={form.layout || "none"}
+                  onValueChange={(v) => setForm({ ...form, layout: v === "none" ? "" : v })}
+                >
+                  <SelectTrigger><SelectValue placeholder="Без" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">Без</SelectItem>
+                    {LAYOUTS.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </Field>
+            )}
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-3">
-            <Field label="Етаж"><Input value={form.floor} onChange={(e) => setForm({ ...form, floor: e.target.value })} placeholder="напр. 4 / 6" /></Field>
-          </div>
+          {hasFloor(form.type) && (
+            <div className="grid gap-4 sm:grid-cols-3">
+              <Field label="Етаж"><Input value={form.floor} onChange={(e) => setForm({ ...form, floor: e.target.value })} placeholder="напр. 4 / 6" /></Field>
+            </div>
+          )}
 
           <Field label="Адрес"><Input value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} /></Field>
 
