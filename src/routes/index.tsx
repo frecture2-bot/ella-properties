@@ -601,7 +601,7 @@ function PropertyCard({ p }: { p: (typeof properties)[number] }) {
           </span>
           {p.floor && (
             <span className="inline-flex items-center gap-1.5">
-              <Layers className="h-3.5 w-3.5 text-gold" /> Етаж {p.floor}
+              <Layers className="h-3.5 w-3.5 text-gold" /> {p.type === "Къща" ? `${p.floor} етажа` : `Етаж ${p.floor}`}
             </span>
           )}
           {p.layout && (

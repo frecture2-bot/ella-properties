@@ -215,7 +215,7 @@ function PropertyDetail() {
           <div className="lg:col-span-2">
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
               <Spec icon={Maximize2} label="Площ" value={`${p.area} м²`} />
-              {p.floor && <Spec icon={Layers} label="Етаж" value={p.floor} />}
+              {p.floor && <Spec icon={Layers} label={p.type === "Къща" ? "Етажи" : "Етаж"} value={p.type === "Къща" ? `${p.floor} етажа` : p.floor} />}
               {p.layout && <Spec icon={HomeIcon} label="Разпределение" value={p.layout} />}
               {p.rooms ? <Spec icon={Building2} label="Стаи" value={String(p.rooms)} /> : null}
             </div>
