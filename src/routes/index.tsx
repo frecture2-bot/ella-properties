@@ -813,9 +813,15 @@ function Contact({ settings }: { settings: PublicSettings }) {
                   id="contact-message"
                   value={form.message}
                   onChange={(e) => update("message", e.target.value)}
+                  onInput={(e) => {
+                    const el = e.currentTarget;
+                    el.style.height = "auto";
+                    el.style.height = `${el.scrollHeight}px`;
+                  }}
                   rows={5}
                   maxLength={1000}
                   placeholder="Разкажете ни какво търсите..."
+                  className="resize-none overflow-hidden"
                 />
               </div>
             </div>
