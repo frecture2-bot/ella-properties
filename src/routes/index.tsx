@@ -816,12 +816,12 @@ function Contact({ settings }: { settings: PublicSettings }) {
                   onInput={(e) => {
                     const el = e.currentTarget;
                     el.style.height = "auto";
-                    el.style.height = `${el.scrollHeight}px`;
+                    el.style.height = `${Math.max(el.scrollHeight, 140)}px`;
                   }}
                   rows={5}
                   maxLength={1000}
                   placeholder="Разкажете ни какво търсите..."
-                  className="resize-none overflow-hidden"
+                  className="min-h-[140px] resize-none overflow-hidden"
                 />
               </div>
             </div>
