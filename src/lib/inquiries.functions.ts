@@ -47,9 +47,9 @@ export const submitInquiry = createServerFn({ method: "POST" })
     const { error } = await supabaseAdmin.rpc("submit_inquiry", {
       _name: data.name,
       _phone: data.phone,
-      _email: data.email && data.email !== "" ? data.email : null,
+      _email: data.email && data.email !== "" ? data.email : undefined,
       _message: data.message,
-      _property_id: data.property_id ?? null,
+      _property_id: data.property_id ?? undefined,
       _client_key: key,
     });
 
