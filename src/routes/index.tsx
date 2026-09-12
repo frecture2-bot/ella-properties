@@ -44,7 +44,9 @@ import { cn } from "@/lib/utils";
 import heroImage from "@/assets/hero.jpg";
 import { properties, type PropertyType, APARTMENT_LAYOUTS } from "@/data/properties";
 import { usePublicProperties } from "@/hooks/use-public-properties";
+import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
+import { submitInquiry } from "@/lib/inquiries.functions";
 import { useSiteSettings, type PublicSettings } from "@/hooks/use-site-settings";
 
 const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
