@@ -818,6 +818,19 @@ function Contact({ settings }: { settings: PublicSettings }) {
             onSubmit={onSubmit}
             className="rounded-2xl border border-border bg-card p-7 shadow-sm lg:col-span-3 lg:p-10"
           >
+            {/* Honeypot: hidden from real users, bots tend to fill it in */}
+            <div className="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
+              <label htmlFor="contact-website">Website</label>
+              <input
+                id="contact-website"
+                name="website"
+                type="text"
+                tabIndex={-1}
+                autoComplete="off"
+                value={form.website}
+                onChange={(e) => update("website", e.target.value)}
+              />
+            </div>
             <div className="grid gap-5 sm:grid-cols-2">
               <Field label="Име *" value={form.name} onChange={(v) => update("name", v)} />
               <Field label="Телефон *" value={form.phone} onChange={(v) => update("phone", v)} type="tel" />
