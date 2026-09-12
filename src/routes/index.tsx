@@ -720,8 +720,10 @@ function Testimonials({ settings }: { settings: PublicSettings }) {
 /* ---------------- Contact ---------------- */
 
 function Contact({ settings }: { settings: PublicSettings }) {
-  const [form, setForm] = useState({ name: "", phone: "", email: "", message: "" });
+  const [form, setForm] = useState({ name: "", phone: "", email: "", message: "", website: "" });
   const [sending, setSending] = useState(false);
+  const [startedAt] = useState(() => Date.now());
+  const sendInquiry = useServerFn(submitInquiry);
 
   function update<K extends keyof typeof form>(k: K, v: string) {
     setForm((f) => ({ ...f, [k]: v }));
@@ -733,20 +735,37 @@ function Contact({ settings }: { settings: PublicSettings }) {
       toast.error("Моля, попълнете задължителните полета.");
       return;
     }
-    setSending(true);
-    const { error } = await supabase.from("inquiries").insert({
-      name: form.name.trim().slice(0, 100),
-      phone: form.phone.trim().slice(0, 50),
-      email: form.email.trim().slice(0, 255) || null,
-      message: form.message.trim().slice(0, 1000),
-    });
-    setSending(false);
-    if (error) {
-      toast.error("Възникна грешка при изпращането. Моля, опитайте по-късно.");
+    if (!/^[0-9+()\s\-./]{5,40}$/.test(form.phone.trim())) {
+      toast.error("Моля, въведете валиден телефонен номер.");
       return;
     }
-    toast.success("Благодарим Ви! Ще се свържем с Вас възможно най-скоро.");
-    setForm({ name: "", phone: "", email: "", message: "" });
+    setSending(true);
+    try {
+      const res = await sendInquiry({
+        data: {
+          name: form.name.trim().slice(0, 100),
+          phone: form.phone.trim().slice(0, 40),
+          email: form.email.trim().slice(0, 255),
+          message: form.message.trim().slice(0, 2000),
+          website: form.website,
+          started_at: startedAt,
+        },
+      });
+      if (!res.ok) {
+        toast.error(
+          res.reason === "rate_limited"
+            ? "Изпратихте твърде много запитвания. Моля, опитайте отново по-късно."
+            : "Възникна грешка при изпращането. Моля, опитайте по-късно.",
+        );
+        return;
+      }
+      toast.success("Благодарим Ви! Ще се свържем с Вас възможно най-скоро.");
+      setForm({ name: "", phone: "", email: "", message: "", website: "" });
+    } catch {
+      toast.error("Възникна грешка при изпращането. Моля, опитайте по-късно.");
+    } finally {
+      setSending(false);
+    }
   }
 
   return (
