@@ -818,7 +818,7 @@ function Contact({ settings }: { settings: PublicSettings }) {
 
           <form
             onSubmit={onSubmit}
-            className="rounded-2xl border border-border bg-card p-7 shadow-sm lg:col-span-3 lg:p-10"
+            className="relative rounded-2xl border border-border bg-card p-7 shadow-sm lg:col-span-3 lg:p-10"
           >
             {/* Honeypot: hidden from real users, bots tend to fill it in */}
             <div className="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
