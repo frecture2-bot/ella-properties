@@ -58,6 +58,24 @@ export type Database = {
           },
         ]
       }
+      inquiry_rate_limits: {
+        Row: {
+          bucket_key: string
+          hits: number
+          window_start: string
+        }
+        Insert: {
+          bucket_key: string
+          hits?: number
+          window_start?: string
+        }
+        Update: {
+          bucket_key?: string
+          hits?: number
+          window_start?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -497,6 +515,17 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      submit_inquiry: {
+        Args: {
+          _client_key: string
+          _email: string
+          _message: string
+          _name: string
+          _phone: string
+          _property_id: string
+        }
+        Returns: string
       }
     }
     Enums: {
