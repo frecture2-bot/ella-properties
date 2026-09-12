@@ -44,7 +44,9 @@ import { cn } from "@/lib/utils";
 import heroImage from "@/assets/hero.jpg";
 import { properties, type PropertyType, APARTMENT_LAYOUTS } from "@/data/properties";
 import { usePublicProperties } from "@/hooks/use-public-properties";
-import { supabase } from "@/integrations/supabase/client";
+import { useServerFn } from "@tanstack/react-start";
+
+import { submitInquiry } from "@/lib/inquiries.functions";
 import { useSiteSettings, type PublicSettings } from "@/hooks/use-site-settings";
 
 const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -720,8 +722,10 @@ function Testimonials({ settings }: { settings: PublicSettings }) {
 /* ---------------- Contact ---------------- */
 
 function Contact({ settings }: { settings: PublicSettings }) {
-  const [form, setForm] = useState({ name: "", phone: "", email: "", message: "" });
+  const [form, setForm] = useState({ name: "", phone: "", email: "", message: "", website: "" });
   const [sending, setSending] = useState(false);
+  const [startedAt] = useState(() => Date.now());
+  const sendInquiry = useServerFn(submitInquiry);
 
   function update<K extends keyof typeof form>(k: K, v: string) {
     setForm((f) => ({ ...f, [k]: v }));
@@ -733,20 +737,37 @@ function Contact({ settings }: { settings: PublicSettings }) {
       toast.error("Моля, попълнете задължителните полета.");
       return;
     }
-    setSending(true);
-    const { error } = await supabase.from("inquiries").insert({
-      name: form.name.trim().slice(0, 100),
-      phone: form.phone.trim().slice(0, 50),
-      email: form.email.trim().slice(0, 255) || null,
-      message: form.message.trim().slice(0, 1000),
-    });
-    setSending(false);
-    if (error) {
-      toast.error("Възникна грешка при изпращането. Моля, опитайте по-късно.");
+    if (!/^[0-9+()\s\-./]{5,40}$/.test(form.phone.trim())) {
+      toast.error("Моля, въведете валиден телефонен номер.");
       return;
     }
-    toast.success("Благодарим Ви! Ще се свържем с Вас възможно най-скоро.");
-    setForm({ name: "", phone: "", email: "", message: "" });
+    setSending(true);
+    try {
+      const res = await sendInquiry({
+        data: {
+          name: form.name.trim().slice(0, 100),
+          phone: form.phone.trim().slice(0, 40),
+          email: form.email.trim().slice(0, 255),
+          message: form.message.trim().slice(0, 2000),
+          website: form.website,
+          started_at: startedAt,
+        },
+      });
+      if (!res.ok) {
+        toast.error(
+          res.reason === "rate_limited"
+            ? "Изпратихте твърде много запитвания. Моля, опитайте отново по-късно."
+            : "Възникна грешка при изпращането. Моля, опитайте по-късно.",
+        );
+        return;
+      }
+      toast.success("Благодарим Ви! Ще се свържем с Вас възможно най-скоро.");
+      setForm({ name: "", phone: "", email: "", message: "", website: "" });
+    } catch {
+      toast.error("Възникна грешка при изпращането. Моля, опитайте по-късно.");
+    } finally {
+      setSending(false);
+    }
   }
 
   return (
@@ -797,8 +818,21 @@ function Contact({ settings }: { settings: PublicSettings }) {
 
           <form
             onSubmit={onSubmit}
-            className="rounded-2xl border border-border bg-card p-7 shadow-sm lg:col-span-3 lg:p-10"
+            className="relative rounded-2xl border border-border bg-card p-7 shadow-sm lg:col-span-3 lg:p-10"
           >
+            {/* Honeypot: hidden from real users, bots tend to fill it in */}
+            <div className="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
+              <label htmlFor="contact-website">Website</label>
+              <input
+                id="contact-website"
+                name="website"
+                type="text"
+                tabIndex={-1}
+                autoComplete="off"
+                value={form.website}
+                onChange={(e) => update("website", e.target.value)}
+              />
+            </div>
             <div className="grid gap-5 sm:grid-cols-2">
               <Field label="Име *" value={form.name} onChange={(v) => update("name", v)} />
               <Field label="Телефон *" value={form.phone} onChange={(v) => update("phone", v)} type="tel" />
