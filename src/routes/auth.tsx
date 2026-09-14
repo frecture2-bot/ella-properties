@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Toaster } from "@/components/ui/sonner";
 import { useSiteSettings } from "@/hooks/use-site-settings";
+import { publicSignUp } from "@/lib/auth.functions";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -64,21 +65,27 @@ function AuthPage() {
         return;
       }
       if (mode === "signup") {
-        if (!settings.allow_registration) {
-          toast.error("Регистрацията е изключена от администратор.");
-          return;
-        }
         const parsed = loginSchema.safeParse({ email, password });
         if (!parsed.success) {
           toast.error(parsed.error.issues[0]?.message ?? "Невалидни данни");
           return;
         }
-        const { error } = await supabase.auth.signUp({
-          email: parsed.data.email,
-          password: parsed.data.password,
-          options: { emailRedirectTo: window.location.origin },
+        // Server-side check of the registration switch; the hidden form is only cosmetic.
+        const res = await signUp({
+          data: {
+            email: parsed.data.email,
+            password: parsed.data.password,
+            redirectTo: window.location.origin,
+          },
         });
-        if (error) throw error;
+        if (!res.ok) {
+          toast.error(
+            res.reason === "disabled"
+              ? "Регистрацията е изключена от администратор."
+              : "Възникна грешка при регистрацията.",
+          );
+          return;
+        }
         toast.success("Регистрацията е успешна. Проверете имейла си за потвърждение.");
         setMode("login");
         return;
