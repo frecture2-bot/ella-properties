@@ -1,4 +1,5 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 import { Building2, Loader2, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
@@ -40,6 +41,7 @@ const loginSchema = z.object({
 function AuthPage() {
   const navigate = useNavigate();
   const settings = useSiteSettings();
+  const signUp = useServerFn(publicSignUp);
   const [mode, setMode] = useState<"login" | "signup" | "forgot">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

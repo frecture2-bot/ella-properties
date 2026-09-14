@@ -21,19 +21,19 @@ export const Route = createFileRoute("/api/public/media/$")({
 
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-        let result: Awaited<ReturnType<typeof supabaseAdmin.storage.download>> | null = null;
+        let result: { data: Blob | null; error: unknown };
         try {
           result = (await Promise.race([
             supabaseAdmin.storage.from(BUCKET).download(path),
             new Promise((_, reject) =>
               setTimeout(() => reject(new Error("timeout")), DOWNLOAD_TIMEOUT_MS),
             ),
-          ])) as Awaited<ReturnType<typeof supabaseAdmin.storage.download>>;
+          ])) as { data: Blob | null; error: unknown };
         } catch {
           return new Response("Unavailable", { status: 504 });
         }
 
-        const { data, error } = result as { data: Blob | null; error: unknown };
+        const { data, error } = result;
         if (error || !data) return new Response("Not found", { status: 404 });
 
         return new Response(await data.arrayBuffer(), {
