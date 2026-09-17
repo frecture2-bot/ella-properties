@@ -108,9 +108,11 @@ async function loadProperty(id: string): Promise<Detail> {
   };
 }
 
+const SITE = "https://ellaimoti.lovable.app";
+
 export const Route = createFileRoute("/properties/$id")({
   loader: ({ params }) => loadProperty(params.id),
-  head: ({ loaderData }) => {
+  head: ({ params, loaderData }) => {
     if (!loaderData) {
       return {
         meta: [
@@ -119,6 +121,7 @@ export const Route = createFileRoute("/properties/$id")({
         ],
       };
     }
+    const url = `${SITE}/properties/${params.id}`;
     const title = (loaderData.seoTitle || `${loaderData.title} — ${loaderData.city}`).slice(0, 60);
     const desc = (
       loaderData.seoDescription ||
@@ -132,12 +135,72 @@ export const Route = createFileRoute("/properties/$id")({
         { property: "og:title", content: title },
         { property: "og:description", content: desc },
         { property: "og:type", content: "article" },
+        { property: "og:url", content: url },
         { name: "twitter:card", content: "summary_large_image" },
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "RealEstateListing",
+            name: loaderData.title,
+            description: desc,
+            url,
+            floorSize: { "@type": "QuantitativeValue", value: loaderData.area, unitCode: "MTK" },
+            offers: {
+              "@type": "Offer",
+              price: loaderData.price,
+              priceCurrency: "EUR",
+              availability: "https://schema.org/InStock",
+            },
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: loaderData.city,
+              addressRegion: loaderData.district,
+              addressCountry: "BG",
+            },
+          }),
+        },
       ],
     };
   },
+  pendingComponent: PropertyPending,
+  notFoundComponent: PropertyNotFound,
   component: PropertyDetail,
 });
+
+function PropertyPending() {
+  return (
+    <main className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+      <div className="h-6 w-40 animate-pulse rounded bg-muted" />
+      <div className="mt-6 h-9 w-2/3 animate-pulse rounded bg-muted" />
+      <div className="mt-6 aspect-[16/10] w-full animate-pulse rounded-2xl bg-muted" />
+      <div className="mt-8 grid gap-3 sm:grid-cols-4">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="h-20 animate-pulse rounded-xl bg-muted" />
+        ))}
+      </div>
+    </main>
+  );
+}
+
+function PropertyNotFound() {
+  return (
+    <main className="mx-auto flex min-h-[60vh] max-w-xl flex-col items-center justify-center px-4 text-center">
+      <h1 className="font-display text-3xl text-navy">Имотът не е намерен</h1>
+      <p className="mt-3 text-muted-foreground">
+        Възможно е офертата вече да не е активна. Разгледайте останалите ни имоти.
+      </p>
+      <Button asChild className="mt-6 rounded-full bg-navy text-white hover:bg-navy-deep">
+        <Link to="/" hash="catalog">
+          Към имотите
+        </Link>
+      </Button>
+    </main>
+  );
+}
 
 function PropertyDetail() {
   const p = Route.useLoaderData();
@@ -184,7 +247,12 @@ function PropertyDetail() {
               {current.kind === "video" ? (
                 <video src={current.url} controls playsInline className="h-full w-full object-contain" />
               ) : (
-                <img src={current.url} alt={p.title} className="h-full w-full object-cover" />
+                <img
+                  src={current.url}
+                  alt={p.title}
+                  decoding="async"
+                  className="h-full w-full object-cover"
+                />
               )}
             </div>
             {p.media.length > 1 && (

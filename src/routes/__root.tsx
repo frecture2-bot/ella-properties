@@ -91,14 +91,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Професионално съдействие при покупка, продажба и отдаване под наем на имоти в област Перник и София.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Елла Недвижими Имоти" },
+      { property: "og:locale", content: "bg_BG" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { name: "theme-color", content: "#0B1E3B" },
     ],
     links: [
       {
         rel: "stylesheet",
         href: appCss,
       },
+      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+      { rel: "apple-touch-icon", href: "/favicon.svg" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
@@ -115,7 +119,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="bg">
       <head>
         <HeadContent />
       </head>

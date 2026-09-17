@@ -109,37 +109,6 @@ export const Route = createFileRoute("/")({
           url: "https://ellaimoti.lovable.app/",
         }),
       },
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "ItemList",
-          name: "Топ оферти",
-          itemListElement: properties.map((p, i) => ({
-            "@type": "ListItem",
-            position: i + 1,
-            item: {
-              "@type": "RealEstateListing",
-              name: p.title,
-              description: p.description,
-              url: "https://ellaimoti.lovable.app/#catalog",
-              floorSize: { "@type": "QuantitativeValue", value: p.area, unitCode: "MTK" },
-              offers: {
-                "@type": "Offer",
-                price: p.price,
-                priceCurrency: "EUR",
-                availability: "https://schema.org/InStock",
-              },
-              address: {
-                "@type": "PostalAddress",
-                addressLocality: p.city,
-                addressRegion: p.district,
-                addressCountry: "BG",
-              },
-            },
-          })),
-        }),
-      },
     ],
   }),
   component: HomePage,
@@ -150,8 +119,14 @@ function HomePage() {
   return (
     <div className="min-h-screen bg-background font-sans text-foreground antialiased">
       <BrandStyle primary={settings.primary_color} accent={settings.accent_color} />
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-navy focus:px-4 focus:py-2 focus:text-white"
+      >
+        Към съдържанието
+      </a>
       <Header settings={settings} />
-      <main>
+      <main id="main">
         <Hero settings={settings} />
         <About settings={settings} />
         <Services settings={settings} />
@@ -180,7 +155,11 @@ function Header({ settings }: { settings: PublicSettings }) {
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-5 lg:px-8">
-        <a href="#top" className="flex min-w-0 shrink items-center gap-2">
+        <a
+          href="#top"
+          aria-label="Начало"
+          className="flex min-w-0 shrink items-center gap-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        >
           <Logo settings={settings} />
         </a>
         <nav className="hidden shrink-0 items-center gap-5 lg:flex xl:gap-8">
@@ -188,7 +167,7 @@ function Header({ settings }: { settings: PublicSettings }) {
             <a
               key={n.href}
               href={n.href}
-              className="whitespace-nowrap text-sm font-medium text-foreground/75 transition-colors hover:text-gold"
+              className="whitespace-nowrap rounded-md text-sm font-medium text-foreground/75 transition-colors hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             >
               {n.label}
             </a>
@@ -292,9 +271,11 @@ function Hero({ settings }: { settings: PublicSettings }) {
       <div className="relative">
         <img
           src={settings.hero_image_url || heroImage}
-          alt="Луксозен апартамент"
+          alt=""
           width={1920}
           height={1280}
+          fetchPriority="high"
+          decoding="async"
           className="h-[88svh] max-h-[860px] min-h-[520px] w-full object-cover sm:h-[78vh] sm:min-h-[560px]"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-navy-deep/85 via-navy-deep/55 to-navy-deep/85" />
@@ -457,7 +438,7 @@ function Catalog({ settings }: { settings: PublicSettings }) {
   const [layout, setLayout] = useState<string>("Всички");
   const [maxPrice, setMaxPrice] = useState<string>("");
   const [minArea, setMinArea] = useState<string>("");
-  const { properties: list } = usePublicProperties();
+  const { properties: list, isLoading } = usePublicProperties();
 
   const districts = useMemo(
     () => ["Всички", ...Array.from(new Set(list.map((p) => p.district).filter(Boolean)))],
@@ -523,14 +504,50 @@ function Catalog({ settings }: { settings: PublicSettings }) {
           </div>
         </div>
 
-        <div className="mt-8 grid gap-5 sm:mt-10 sm:gap-7 md:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((p) => (
-            <PropertyCard key={p.id} p={p} />
-          ))}
-        </div>
-        {filtered.length === 0 && (
-          <div className="mt-10 rounded-2xl border border-dashed border-border p-8 text-center sm:p-12 text-muted-foreground">
-            Няма намерени имоти по зададените критерии.
+        <p className="mt-6 text-sm text-muted-foreground" aria-live="polite">
+          {isLoading
+            ? "Зареждане на имотите…"
+            : `Намерени ${filtered.length} ${filtered.length === 1 ? "имот" : "имота"}`}
+        </p>
+
+        {isLoading ? (
+          <div className="mt-4 grid gap-5 sm:gap-7 md:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+                <div className="aspect-[4/3] w-full animate-pulse bg-muted" />
+                <div className="space-y-3 p-6">
+                  <div className="h-5 w-2/3 animate-pulse rounded bg-muted" />
+                  <div className="h-4 w-1/3 animate-pulse rounded bg-muted" />
+                  <div className="h-4 w-full animate-pulse rounded bg-muted" />
+                  <div className="h-8 w-1/2 animate-pulse rounded bg-muted" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="mt-4 grid gap-5 sm:gap-7 md:grid-cols-2 lg:grid-cols-3">
+            {filtered.map((p) => (
+              <PropertyCard key={p.id} p={p} />
+            ))}
+          </div>
+        )}
+        {!isLoading && filtered.length === 0 && (
+          <div className="mt-10 rounded-2xl border border-dashed border-border p-8 text-center sm:p-12">
+            <p className="text-muted-foreground">Няма намерени имоти по зададените критерии.</p>
+            <Button
+              variant="outline"
+              className="mt-4 rounded-full"
+              onClick={() => {
+                setType("Всички");
+                setListing("Всички");
+                setDistrict("Всички");
+                setLayout("Всички");
+                setMaxPrice("");
+                setMinArea("");
+              }}
+            >
+              Изчисти филтрите
+            </Button>
           </div>
         )}
       </div>
@@ -834,10 +851,10 @@ function Contact({ settings }: { settings: PublicSettings }) {
               />
             </div>
             <div className="grid gap-5 sm:grid-cols-2">
-              <Field label="Име *" value={form.name} onChange={(v) => update("name", v)} />
-              <Field label="Телефон *" value={form.phone} onChange={(v) => update("phone", v)} type="tel" />
+              <Field label="Име *" value={form.name} onChange={(v) => update("name", v)} required autoComplete="name" />
+              <Field label="Телефон *" value={form.phone} onChange={(v) => update("phone", v)} type="tel" required autoComplete="tel" />
               <div className="sm:col-span-2">
-                <Field label="Имейл" value={form.email} onChange={(v) => update("email", v)} type="email" />
+                <Field label="Имейл" value={form.email} onChange={(v) => update("email", v)} type="email" autoComplete="email" />
               </div>
               <div className="sm:col-span-2 flex flex-col gap-1.5">
                 <Label htmlFor="contact-message" className="text-xs uppercase tracking-wider text-muted-foreground">
@@ -879,11 +896,15 @@ function Field({
   value,
   onChange,
   type = "text",
+  required = false,
+  autoComplete,
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
   type?: string;
+  required?: boolean;
+  autoComplete?: string;
 }) {
   const id = useId();
   return (
@@ -894,6 +915,8 @@ function Field({
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        required={required}
+        autoComplete={autoComplete}
         maxLength={200}
       />
     </div>
