@@ -851,10 +851,10 @@ function Contact({ settings }: { settings: PublicSettings }) {
               />
             </div>
             <div className="grid gap-5 sm:grid-cols-2">
-              <Field label="Име *" value={form.name} onChange={(v) => update("name", v)} />
-              <Field label="Телефон *" value={form.phone} onChange={(v) => update("phone", v)} type="tel" />
+              <Field label="Име *" value={form.name} onChange={(v) => update("name", v)} required autoComplete="name" />
+              <Field label="Телефон *" value={form.phone} onChange={(v) => update("phone", v)} type="tel" required autoComplete="tel" />
               <div className="sm:col-span-2">
-                <Field label="Имейл" value={form.email} onChange={(v) => update("email", v)} type="email" />
+                <Field label="Имейл" value={form.email} onChange={(v) => update("email", v)} type="email" autoComplete="email" />
               </div>
               <div className="sm:col-span-2 flex flex-col gap-1.5">
                 <Label htmlFor="contact-message" className="text-xs uppercase tracking-wider text-muted-foreground">
