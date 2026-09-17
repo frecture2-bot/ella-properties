@@ -896,11 +896,15 @@ function Field({
   value,
   onChange,
   type = "text",
+  required = false,
+  autoComplete,
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
   type?: string;
+  required?: boolean;
+  autoComplete?: string;
 }) {
   const id = useId();
   return (
@@ -911,6 +915,8 @@ function Field({
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        required={required}
+        autoComplete={autoComplete}
         maxLength={200}
       />
     </div>
