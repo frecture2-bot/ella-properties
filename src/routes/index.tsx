@@ -119,8 +119,14 @@ function HomePage() {
   return (
     <div className="min-h-screen bg-background font-sans text-foreground antialiased">
       <BrandStyle primary={settings.primary_color} accent={settings.accent_color} />
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-navy focus:px-4 focus:py-2 focus:text-white"
+      >
+        Към съдържанието
+      </a>
       <Header settings={settings} />
-      <main>
+      <main id="main">
         <Hero settings={settings} />
         <About settings={settings} />
         <Services settings={settings} />
@@ -149,7 +155,11 @@ function Header({ settings }: { settings: PublicSettings }) {
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-5 lg:px-8">
-        <a href="#top" className="flex min-w-0 shrink items-center gap-2">
+        <a
+          href="#top"
+          aria-label="Начало"
+          className="flex min-w-0 shrink items-center gap-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        >
           <Logo settings={settings} />
         </a>
         <nav className="hidden shrink-0 items-center gap-5 lg:flex xl:gap-8">
