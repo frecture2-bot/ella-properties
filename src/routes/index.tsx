@@ -438,7 +438,7 @@ function Catalog({ settings }: { settings: PublicSettings }) {
   const [layout, setLayout] = useState<string>("Всички");
   const [maxPrice, setMaxPrice] = useState<string>("");
   const [minArea, setMinArea] = useState<string>("");
-  const { properties: list } = usePublicProperties();
+  const { properties: list, isLoading } = usePublicProperties();
 
   const districts = useMemo(
     () => ["Всички", ...Array.from(new Set(list.map((p) => p.district).filter(Boolean)))],
@@ -504,14 +504,50 @@ function Catalog({ settings }: { settings: PublicSettings }) {
           </div>
         </div>
 
-        <div className="mt-8 grid gap-5 sm:mt-10 sm:gap-7 md:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((p) => (
-            <PropertyCard key={p.id} p={p} />
-          ))}
-        </div>
-        {filtered.length === 0 && (
-          <div className="mt-10 rounded-2xl border border-dashed border-border p-8 text-center sm:p-12 text-muted-foreground">
-            Няма намерени имоти по зададените критерии.
+        <p className="mt-6 text-sm text-muted-foreground" aria-live="polite">
+          {isLoading
+            ? "Зареждане на имотите…"
+            : `Намерени ${filtered.length} ${filtered.length === 1 ? "имот" : "имота"}`}
+        </p>
+
+        {isLoading ? (
+          <div className="mt-4 grid gap-5 sm:gap-7 md:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+                <div className="aspect-[4/3] w-full animate-pulse bg-muted" />
+                <div className="space-y-3 p-6">
+                  <div className="h-5 w-2/3 animate-pulse rounded bg-muted" />
+                  <div className="h-4 w-1/3 animate-pulse rounded bg-muted" />
+                  <div className="h-4 w-full animate-pulse rounded bg-muted" />
+                  <div className="h-8 w-1/2 animate-pulse rounded bg-muted" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="mt-4 grid gap-5 sm:gap-7 md:grid-cols-2 lg:grid-cols-3">
+            {filtered.map((p) => (
+              <PropertyCard key={p.id} p={p} />
+            ))}
+          </div>
+        )}
+        {!isLoading && filtered.length === 0 && (
+          <div className="mt-10 rounded-2xl border border-dashed border-border p-8 text-center sm:p-12">
+            <p className="text-muted-foreground">Няма намерени имоти по зададените критерии.</p>
+            <Button
+              variant="outline"
+              className="mt-4 rounded-full"
+              onClick={() => {
+                setType("Всички");
+                setListing("Всички");
+                setDistrict("Всички");
+                setLayout("Всички");
+                setMaxPrice("");
+                setMinArea("");
+              }}
+            >
+              Изчисти филтрите
+            </Button>
           </div>
         )}
       </div>
