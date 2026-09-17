@@ -247,7 +247,12 @@ function PropertyDetail() {
               {current.kind === "video" ? (
                 <video src={current.url} controls playsInline className="h-full w-full object-contain" />
               ) : (
-                <img src={current.url} alt={p.title} className="h-full w-full object-cover" />
+                <img
+                  src={current.url}
+                  alt={p.title}
+                  decoding="async"
+                  className="h-full w-full object-cover"
+                />
               )}
             </div>
             {p.media.length > 1 && (
