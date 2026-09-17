@@ -167,7 +167,7 @@ function Header({ settings }: { settings: PublicSettings }) {
             <a
               key={n.href}
               href={n.href}
-              className="whitespace-nowrap text-sm font-medium text-foreground/75 transition-colors hover:text-gold"
+              className="whitespace-nowrap rounded-md text-sm font-medium text-foreground/75 transition-colors hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             >
               {n.label}
             </a>
@@ -271,9 +271,11 @@ function Hero({ settings }: { settings: PublicSettings }) {
       <div className="relative">
         <img
           src={settings.hero_image_url || heroImage}
-          alt="Луксозен апартамент"
+          alt=""
           width={1920}
           height={1280}
+          fetchPriority="high"
+          decoding="async"
           className="h-[88svh] max-h-[860px] min-h-[520px] w-full object-cover sm:h-[78vh] sm:min-h-[560px]"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-navy-deep/85 via-navy-deep/55 to-navy-deep/85" />
